@@ -1,4 +1,3 @@
-//MyGdxGame
 package com.me.mygdxgame;
 
 import java.util.Iterator;
@@ -24,6 +23,10 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class MyGdxGame implements ApplicationListener {
 /*
  * Assets
+ * 
+ * Assets are things such as Images, music
+ * 
+ * All assets are stored in the Android project folder under assets
  */
 	
 	//Textures
@@ -36,12 +39,13 @@ public class MyGdxGame implements ApplicationListener {
 	
 	//Sound
 	
-	//Fonts
-	private BitmapFont font;
+	
 /*
  * End Assets
  */
 	
+	//Fonts
+	private BitmapFont font;
 	
 	
 	//This will determine what we see on the screen and also pans the view
@@ -76,7 +80,7 @@ public class MyGdxGame implements ApplicationListener {
 	
 	//Resolution Width
 	public final int RESW = 800;
-	//Resoution Height
+	//Resolution Height
 	public final int RESH = 480; 
 	
 	//private boolean played;
@@ -86,12 +90,18 @@ public class MyGdxGame implements ApplicationListener {
 	
 	
 	
-	
+	/*
+	 * The asset manager requires you to type more code, but 
+	 * allows you to prevent crashes caused by trying to use an asset
+	 * before it's fully loaded.
+	 */
 	AssetManager manager = new AssetManager();
-
+	
+	//The create class is called when the application is launched. It's not exactly a main class
 	@Override
 	public void create() {
 
+		
 		obstacle = new Texture(Gdx.files.internal("data/waterdrop.png"));
 		
 		//dropSound = Gdx.audio.newSound(Gdx.files.internal("data/waterdrop.wav"));
