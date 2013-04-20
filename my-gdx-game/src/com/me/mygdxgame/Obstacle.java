@@ -48,7 +48,7 @@ public class Obstacle {
 	}
 
 	public boolean isOffScreen() {
-		if (hitbox.x < camera.position.x - RESW/2 - SPRITE_WIDTH) {
+		if (hitbox.x < camera.position.x - RESW/2 - SPRITE_WIDTH * 2) {
 			return true;
 		}
 		else {
