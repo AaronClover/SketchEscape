@@ -180,14 +180,10 @@ public class MyGdxGame implements ApplicationListener {
 		//Input
 		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
 			runner.jump();
-		} else {
-			runner.release();
+		} 
+		else if (Gdx.input.isKeyPressed(Keys.P)) {
 		}
-		
-		if (Gdx.input.isKeyPressed(Keys.P)) {
-		}
-
-		if (Gdx.input.isTouched()) {
+		else if (Gdx.input.isTouched()) {
 			runner.jump();
 		} else {
 			runner.release();

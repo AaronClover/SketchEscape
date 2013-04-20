@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Runner {
-	private static final float JUMP_HEIGHT = 12;
+	private static final float JUMP_HEIGHT = 5;
 	private Texture currentSprite;
 	private Texture runningSprite[];
 	private Texture jumpingSprite[];
@@ -53,7 +53,9 @@ public class Runner {
 				new Texture(Gdx.files.internal("data/bearsum/walk1.png")),
 				new Texture(Gdx.files.internal("data/bearsum/walk2.png")),
 				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk4.png")) };
+				new Texture(Gdx.files.internal("data/bearsum/walk4.png")),
+				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
+				new Texture(Gdx.files.internal("data/bearsum/walk2.png"))};
 		runningSprite = walkingInit;
 		Texture jumpingInit[] = {
 				new Texture(Gdx.files.internal("data/bearsum/jump1.png")),
@@ -90,9 +92,9 @@ public class Runner {
 		}
 		
 		batch.draw(currentSprite, hitbox.x, hitbox.y);
-		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
+		if (TimeUtils.nanoTime() - lastFrameTime >= 10000000) {
 			if (state == State.jumping) {
-				if (animationIndex < jumpingSprite.length) {
+				if (animationIndex < jumpingSprite.length-1) {
 					animationIndex++;
 				}
 			} else {
