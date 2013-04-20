@@ -5,28 +5,37 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Runner {
-	private Texture runnerImage;
+	private static final float JUMP_HEIGHT = 12;
+	private Texture currentSprite;
+	private Texture runningSprite[];
+	private Texture jumpingSprite[];
+	private int animationIndex;
+	private float lastFrameTime;
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
 	private float camH;
 	private float camW;
-	final int SPRITE_WIDTH = 96;
-	final int SPRITE_HEIGHT = 96;
-	final int SCALE = 1;
+	final int SPRITE_WIDTH = 43;
+	final int SPRITE_HEIGHT = 60;
+	final int SCALE = 1; // Only affects hit box at the moment
 	final int WIDTH = SPRITE_WIDTH * SCALE;
 	final int HEIGHT = SPRITE_HEIGHT * SCALE;
 	private OrthographicCamera camera;
 	private int floorHeight;
 	private int posX = -300;
-	private boolean jumped;
 	private float speedY;
 	private final float gravity = -1;
 	private float jumpSpeed;
 	protected boolean released;
+	
+	enum State { jumping, running, dead};
+	State state;
+
+	// Debug
 
 	Runner(OrthographicCamera pcamera, int pheight) {
 		RESW = pcamera.viewportHeight;
@@ -40,24 +49,70 @@ public class Runner {
 
 	public void create() {
 		speedY = 0;
-		runnerImage = new Texture(Gdx.files.internal("data/red_bucket.png"));
+		Texture walkingInit[] = {
+				new Texture(Gdx.files.internal("data/bearsum/walk1.png")),
+				new Texture(Gdx.files.internal("data/bearsum/walk2.png")),
+				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
+				new Texture(Gdx.files.internal("data/bearsum/walk4.png")) };
+		runningSprite = walkingInit;
+		Texture jumpingInit[] = {
+				new Texture(Gdx.files.internal("data/bearsum/jump1.png")),
+				new Texture(Gdx.files.internal("data/bearsum/jump2.png")),
+				new Texture(Gdx.files.internal("data/bearsum/jump3.png")) };
+		jumpingSprite = jumpingInit;
 		hitbox = new Rectangle(camera.position.x + posX, floorHeight,
 				SPRITE_WIDTH, SPRITE_HEIGHT);
+		animationIndex = 0;
+		lastFrameTime = TimeUtils.nanoTime();
+		state = State.running;
 	}
 
 	public void draw(SpriteBatch batch) {
+		switch (state) {
+		case running:
+			if (animationIndex > runningSprite.length-1) {
+				animationIndex = 0;
+			}
+			currentSprite = runningSprite[animationIndex];
+			break;
+			
+		case jumping:
+			if (animationIndex > jumpingSprite.length-1) {
+				animationIndex = 0;
+			}
+			currentSprite = jumpingSprite[animationIndex];
+			break;
+			
+		case dead:
+			break;
+		default:
+			break;
+		}
+		
+		batch.draw(currentSprite, hitbox.x, hitbox.y);
+		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
+			if (state == State.jumping) {
+				if (animationIndex < jumpingSprite.length) {
+					animationIndex++;
+				}
+			} else {
+				animationIndex++;
+			}
+			
+			lastFrameTime = TimeUtils.nanoTime();
+		}
+		
 
-		batch.draw(runnerImage, hitbox.x, hitbox.y);
 	}
 
 	public void floorCheck() {
 		if (speedY > 0) {
-			jumped = true;
+			state = state.jumping;
 			jumpSpeed *= 0.70;
 		} else {
 			if (hitbox.y <= floorHeight) {
-				jumped = false;
-				jumpSpeed = 6;
+				state = state.running;
+				jumpSpeed = JUMP_HEIGHT;
 				hitbox.y = floorHeight;
 				speedY = 0;
 			}
@@ -66,7 +121,13 @@ public class Runner {
 	}
 
 	public void dispose() {
-		runnerImage.dispose();
+		currentSprite.dispose();
+		for (int i = 0; i < runningSprite.length; i++) {
+			runningSprite[i].dispose();
+		}
+		for (int i = 0; i < jumpingSprite.length; i++) {
+			jumpingSprite[i].dispose();
+		}
 	}
 
 	public void update() {
@@ -77,21 +138,25 @@ public class Runner {
 	}
 
 	public void jump() {
-		if (jumped == false && released == true) {
+		if (state == State.running && released == true) {
 			speedY += jumpSpeed;
-			System.out.println("Jump!\n");
 		}
-		if (jumped == true && released == false) {
+		if (state == State.jumping && released == false) {
 			speedY += jumpSpeed;
 		}
 		released = false;
 	}
 
 	public void release() {
-		if (jumped == false) {
+		if (state == State.running) {
 			released = true;
 		}
 
+	}
+
+	public void kill() {
+		// TODO Auto-generated method stub
+		System.out.println("Dead");
 	}
 
 }
