@@ -172,10 +172,6 @@ public class MyGdxGame implements ApplicationListener {
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
 		}
-		font.draw(batch, String.valueOf(camera.position.x), camera.position.x,
-				420);
-		font.draw(batch, String.valueOf(TimeUtils.nanoTime()),
-				camera.position.x, 400);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.end();
@@ -194,19 +190,23 @@ public class MyGdxGame implements ApplicationListener {
 			lastSpawnPos = MathUtils.random(lastSpawnPos, lastSpawnPos + RESW);
 			obstacles.add(new Obstacle(camera, lastSpawnPos, FLOOR_HEIGHT));
 			lastSpawnTime = TimeUtils.nanoTime();
-			System.out.println(lastSpawnPos);
-
 		}
 
 		for (int i = 0; i < obstacles.size(); i++) {
-			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
-				runner.kill();
-			}
 			if (obstacles.get(i).isOffScreen()) {
 				obstacles.remove(i);
 			}
+			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
+				endGame();
+			}
+			
 		}
 
+	}
+
+	private void endGame() {
+		create();
+		
 	}
 
 	@Override
