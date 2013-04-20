@@ -15,20 +15,20 @@ public class Obstacle {
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
-	final int SPRITE_WIDTH = 96;
-	final int SPRITE_HEIGHT = 96;
+	final int SPRITE_WIDTH = 34;
+	final int SPRITE_HEIGHT = 48;
 	final int SCALE = 1;
 	final int WIDTH = SPRITE_WIDTH * SCALE;
 	final int HEIGHT = SPRITE_HEIGHT * SCALE;
 	private OrthographicCamera camera;
-	private float floorHeight;
+	protected float height;
 	protected boolean released;
 
 	Obstacle(OrthographicCamera pcamera, float x, float y) {
 		RESW = pcamera.viewportHeight;
 		RESH = pcamera.viewportHeight;
 		camera = pcamera;
-		floorHeight = y;
+		height = y;
 		create(x, y);
 	}
 
@@ -54,6 +54,10 @@ public class Obstacle {
 		else {
 			return false;
 		}
+	}
+	
+	public float getTop() {
+		return height + SPRITE_HEIGHT;
 	}
 
 
