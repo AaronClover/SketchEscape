@@ -25,7 +25,7 @@ public class Runner {
 	final int WIDTH = SPRITE_WIDTH * SCALE;
 	final int HEIGHT = SPRITE_HEIGHT * SCALE;
 	private OrthographicCamera camera;
-	private int floorHeight;
+	private float floorHeight;
 	private int posX = -300;
 	private float speedY;
 	private final float gravity = -1;
@@ -37,7 +37,7 @@ public class Runner {
 
 	// Debug
 
-	Runner(OrthographicCamera pcamera, int pheight) {
+	Runner(OrthographicCamera pcamera, float pheight) {
 		RESW = pcamera.viewportHeight;
 		RESH = pcamera.viewportHeight;
 		camH = RESH / 2;
