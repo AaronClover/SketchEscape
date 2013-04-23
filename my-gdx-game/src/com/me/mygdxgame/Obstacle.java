@@ -33,7 +33,7 @@ public class Obstacle {
 	}
 
 	public void create(float x, float y) {
-		image = new Texture(Gdx.files.internal("data/waterdrop.png"));
+		image = new Texture(Gdx.files.internal("data/obstacle.png"));
 		hitbox = new Rectangle(x, y, SPRITE_WIDTH,
 				SPRITE_HEIGHT);
 	}
@@ -48,7 +48,7 @@ public class Obstacle {
 	}
 
 	public boolean isOffScreen() {
-		if (hitbox.x < camera.position.x - RESW/2 - SPRITE_WIDTH * 2) {
+		if (hitbox.x < camera.position.x - RESW) {
 			return true;
 		}
 		else {

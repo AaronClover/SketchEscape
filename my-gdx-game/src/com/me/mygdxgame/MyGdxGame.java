@@ -177,9 +177,11 @@ public class MyGdxGame implements ApplicationListener {
 		batch.end();
 
 		// Input
-		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
+		if (Gdx.input.isKeyPressed(Keys.UP)) {
 			runner.jump();
-		} else if (Gdx.input.isKeyPressed(Keys.P)) {
+		}
+		else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+			runner.duck();
 		} else if (Gdx.input.isTouched()) {
 			runner.jump();
 		} else {
@@ -188,7 +190,7 @@ public class MyGdxGame implements ApplicationListener {
 
 		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
 			lastSpawnPos = MathUtils.random(lastSpawnPos, lastSpawnPos + RESW);
-			obstacles.add(new Obstacle(camera, lastSpawnPos, FLOOR_HEIGHT));
+			obstacles.add(new Obstacle(camera, lastSpawnPos, MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
 			lastSpawnTime = TimeUtils.nanoTime();
 		}
 

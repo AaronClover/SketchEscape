@@ -12,6 +12,7 @@ public class Runner {
 	private Texture currentSprite;
 	private Texture runningSprite[];
 	private Texture jumpingSprite[];
+	private Texture duckingSprite[];
 	private int animationIndex;
 	private float lastFrameTime;
 	protected Rectangle hitbox;
@@ -31,8 +32,11 @@ public class Runner {
 	private final float gravity = -1;
 	private float jumpSpeed;
 	protected boolean released;
-	
-	enum State { jumping, running, dead};
+
+	enum State {
+		jumping, running, dead, ducking
+	};
+
 	State state;
 
 	// Debug
@@ -62,6 +66,14 @@ public class Runner {
 				new Texture(Gdx.files.internal("data/bearsum/jump2.png")),
 				new Texture(Gdx.files.internal("data/bearsum/jump3.png")) };
 		jumpingSprite = jumpingInit;
+		Texture duckingInit[] = { 
+				new Texture(Gdx.files.internal("data/bearsum/roll1.png")),
+				new Texture(Gdx.files.internal("data/bearsum/roll2.png")),
+				new Texture(Gdx.files.internal("data/bearsum/roll3.png")),
+				new Texture(Gdx.files.internal("data/bearsum/roll4.png")),
+				new Texture(Gdx.files.internal("data/bearsum/roll5.png")) };
+		duckingSprite = duckingInit;
+		
 		hitbox = new Rectangle(camera.position.x + posX, floorHeight,
 				SPRITE_WIDTH, SPRITE_HEIGHT);
 		animationIndex = 0;
@@ -72,38 +84,41 @@ public class Runner {
 	public void draw(SpriteBatch batch) {
 		switch (state) {
 		case running:
-			if (animationIndex > runningSprite.length-1) {
+			if (animationIndex > runningSprite.length - 1) {
 				animationIndex = 0;
 			}
 			currentSprite = runningSprite[animationIndex];
 			break;
-			
+
 		case jumping:
-			if (animationIndex > jumpingSprite.length-1) {
+			if (animationIndex > jumpingSprite.length - 1) {
 				animationIndex = 0;
 			}
 			currentSprite = jumpingSprite[animationIndex];
 			break;
-			
+
+		case ducking:
+			if (animationIndex > duckingSprite.length - 1) {
+				animationIndex = 0;
+			}
 		case dead:
 			break;
 		default:
 			break;
 		}
-		
+
 		batch.draw(currentSprite, hitbox.x, hitbox.y);
-		if (TimeUtils.nanoTime() - lastFrameTime >= 10000000) {
+		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
 			if (state == State.jumping) {
-				if (animationIndex < jumpingSprite.length-1) {
+				if (animationIndex < jumpingSprite.length - 1) {
 					animationIndex++;
 				}
 			} else {
 				animationIndex++;
 			}
-			
+
 			lastFrameTime = TimeUtils.nanoTime();
 		}
-		
 
 	}
 
@@ -113,10 +128,13 @@ public class Runner {
 			jumpSpeed *= 0.70;
 		} else {
 			if (hitbox.y <= floorHeight) {
-				state = state.running;
+				if (state != State.ducking) {
+					state = state.running;
+				}
 				jumpSpeed = JUMP_HEIGHT;
 				hitbox.y = floorHeight;
 				speedY = 0;
+			
 			}
 		}
 
@@ -153,12 +171,21 @@ public class Runner {
 		if (state == State.running) {
 			released = true;
 		}
+		if (state == State.ducking) {
+			hitbox.setHeight(SPRITE_HEIGHT);
+			hitbox.setWidth(SPRITE_WIDTH);
+			state = State.running;
+		}
 
 	}
 
-	public void kill() {
-		// TODO Auto-generated method stub
-		System.out.println("Dead");
+	public void duck() {
+		hitbox.setHeight(SPRITE_WIDTH);
+		hitbox.setHeight(SPRITE_HEIGHT);
+		if (state == State.running) {
+			state = State.ducking;
+		}
+
 	}
 
 }
