@@ -1,5 +1,4 @@
 package com.me.mygdxgame;
- //
 
 import java.util.ArrayList;
 
