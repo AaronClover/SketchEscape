@@ -15,10 +15,10 @@ public class Obstacle {
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
-	final int SPRITE_WIDTH = 34;
+	final static int SPRITE_WIDTH = 34;
 	final int SPRITE_HEIGHT = 48;
-	final int SCALE = 1;
-	final int WIDTH = SPRITE_WIDTH * SCALE;
+	final static int SCALE = 1;
+	public final static int WIDTH = SPRITE_WIDTH * SCALE;
 	final int HEIGHT = SPRITE_HEIGHT * SCALE;
 	private OrthographicCamera camera;
 	protected float height;

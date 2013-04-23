@@ -187,10 +187,11 @@ public class MyGdxGame implements ApplicationListener {
 		} else {
 			runner.release();
 		}
-
+		
+		
 		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-			lastSpawnPos = MathUtils.random(lastSpawnPos, lastSpawnPos + RESW);
-			obstacles.add(new Obstacle(camera, lastSpawnPos, MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
+			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.WIDTH, lastSpawnPos + RESW);
+			obstacles.add(new Obstacle(camera, lastSpawnPos, FLOOR_HEIGHT));//MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
 			lastSpawnTime = TimeUtils.nanoTime();
 		}
 
