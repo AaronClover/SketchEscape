@@ -15,7 +15,7 @@ public class Obstacle {
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
-	final static int SPRITE_WIDTH = 34;
+	final static int SPRITE_WIDTH = 48;
 	final int SPRITE_HEIGHT = 48;
 	final static int SCALE = 1;
 	public final static int WIDTH = SPRITE_WIDTH * SCALE;

@@ -64,7 +64,9 @@ public class MyGdxGame implements ApplicationListener {
 	// Used as a timer for spawning obstacles
 	private long lastSpawnTime;
 	private float lastSpawnPos;
-
+	private float spawnPositionY;
+	private int spawnPositionRandom;
+	
 	// Current game timer
 	private float timer;
 
@@ -187,10 +189,20 @@ public class MyGdxGame implements ApplicationListener {
 			runner.release();
 		}
 		
+		//generate random seletion for obstacle to be on floor or mid height.
+		spawnPositionRandom = MathUtils.random(1,2);
+		if(spawnPositionRandom == 1)
+		{
+			spawnPositionY = FLOOR_HEIGHT + 60;
+		}
+		else 
+		{
+			spawnPositionY = FLOOR_HEIGHT;
+		}
 		
 		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.WIDTH, lastSpawnPos + RESW);
-			obstacles.add(new Obstacle(camera, lastSpawnPos, FLOOR_HEIGHT));//MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
+			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.WIDTH * 3, lastSpawnPos + RESW);
+			obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));//MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
 			lastSpawnTime = TimeUtils.nanoTime();
 		}
 
