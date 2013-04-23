@@ -18,8 +18,6 @@ public class Runner {
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
-	private float camH;
-	private float camW;
 	final int SPRITE_WIDTH = 43;
 	final int SPRITE_HEIGHT = 60;
 	final int SCALE = 1; // Only affects hit box at the moment
@@ -44,8 +42,6 @@ public class Runner {
 	Runner(OrthographicCamera pcamera, float pheight) {
 		RESW = pcamera.viewportHeight;
 		RESH = pcamera.viewportHeight;
-		camH = RESH / 2;
-		camW = RESW / 2;
 		camera = pcamera;
 		floorHeight = pheight;
 		create();
