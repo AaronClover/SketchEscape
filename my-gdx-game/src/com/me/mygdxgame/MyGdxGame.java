@@ -28,6 +28,7 @@ public class MyGdxGame implements ApplicationListener {
 
 	// Textures
 	private Texture floor;
+	private Texture background;
 
 	// Music
 	private Music music1;
@@ -84,6 +85,8 @@ public class MyGdxGame implements ApplicationListener {
 	// Position of the floor
 	private final float FLOOR_HEIGHT = 30;
 	private float floorPosX[];
+	// Position of background
+	private float backgroundPosX[];
 
 	/*
 	 * The asset manager requires you to type more code, but allows you to
@@ -105,11 +108,14 @@ public class MyGdxGame implements ApplicationListener {
 		manager.load("data/music/1.mp3", Music.class);
 		manager.load("data/music/2.mp3", Music.class);
 		manager.load("data/floor.png", Texture.class);
+		manager.load("data/floor.png", Texture.class);
+		manager.load("data/whitepaper.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		music1 = manager.get("data/music/1.mp3", Music.class);
 		music2 = manager.get("data/music/2.mp3", Music.class);
 		floor = manager.get("data/floor.png", Texture.class);
+		background = manager.get("data/whitepaper.png", Texture.class);
 
 		music2.setLooping(true);
 
@@ -132,9 +138,11 @@ public class MyGdxGame implements ApplicationListener {
 		// BitmapFont(Gdx.files.internal("Calibri.fnt"),Gdx.files.internal("Calibri.png"),false);
 		font = new BitmapFont();
 
-		float floorstart[] = { camera.position.x - RESW / 2,
+		floorPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
-		floorPosX = floorstart;
+
+		backgroundPosX = new float[] { camera.position.x - RESW / 2,
+				camera.position.x + RESW / 2 };
 
 		// played = false;
 
@@ -150,6 +158,10 @@ public class MyGdxGame implements ApplicationListener {
 		camera.position.add(RUN_SPEED, 0, 0);
 		camera.update();
 
+		// Moves background to appear to be moving slower
+		backgroundPosX[0] += 0.5f;
+		backgroundPosX[1] += 0.5f;
+
 		// if (timer >= (float)15/2 && played == false) {
 		// music2.play();
 		// played = true;
@@ -158,75 +170,88 @@ public class MyGdxGame implements ApplicationListener {
 		// Updates
 		runner.update();
 
+		// Checks floor positioning
 		if (floorPosX[0] < camera.position.x - RESW * 1.5) {
 			floorPosX[0] = camera.position.x + RESW / 2 - 8;
 		}
 		if (floorPosX[1] < camera.position.x - RESW * 1.5) {
 			floorPosX[1] = camera.position.x + RESW / 2 - 8;
 		}
+
+		if (backgroundPosX[0] < camera.position.x - RESW * 1.5) {
+			backgroundPosX[0] = camera.position.x + RESW / 2;
+		}
+		if (backgroundPosX[1] < camera.position.x - RESW * 1.5) {
+			backgroundPosX[1] = camera.position.x + RESW / 2;
+		}
+
 		// Rendering
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		batch.draw(background, backgroundPosX[0], 0);
+		batch.draw(background, backgroundPosX[1], 0);
+		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
+		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		runner.draw(batch);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
 		}
-		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
-		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
+
 		batch.end();
+
 		// Input
 
-		Gdx.input.justTouched();
-		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-			runner.jump();
-		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			runner.duck();
-		} else if (Gdx.input.isTouched()) {
-			// If user touches left side of the screen then Runner Ducks
-			if (Gdx.input.getX() < 400) {
-				runner.duck();
-			}
-			// user touches right side of the screen then Jump.
-			else if (Gdx.input.getX() >= 400) {
-				runner.jump();
-			}
-		} else {
-			runner.release();
-		}
+				Gdx.input.justTouched();
+				if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+					runner.jump();
+				} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+					runner.duck();
+				} else if (Gdx.input.isTouched()) {
+					// If user touches left side of the screen then Runner Ducks
+					if (Gdx.input.getX() < 400) {
+						runner.duck();
+					}
+					// user touches right side of the screen then Jump.
+					else if (Gdx.input.getX() >= 400) {
+						runner.jump();
+					}
+				} else {
+					runner.release();
+				}
 
-		// generate random selection for obstacle to be on floor or mid height.
-		spawnPositionRandom = MathUtils.random(1, 2);
-		if (spawnPositionRandom == 1) {
-			spawnPositionY = FLOOR_HEIGHT + 50;
-		} else {
-			spawnPositionY = FLOOR_HEIGHT;
-		}
+				// generate random selection for obstacle to be on floor or mid height.
+				spawnPositionRandom = MathUtils.random(1, 2);
+				if (spawnPositionRandom == 1) {
+					spawnPositionY = FLOOR_HEIGHT + 50;
+				} else {
+					spawnPositionY = FLOOR_HEIGHT;
+				}
 
-		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-			lastSpawnPos = MathUtils.random(lastSpawnPos
-					+ Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
-			obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));// MathUtils.random(FLOOR_HEIGHT,
-																				// FLOOR_HEIGHT
-																				// +
-																				// 60)));
-			lastSpawnTime = TimeUtils.nanoTime();
-		}
+				if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
+					lastSpawnPos = MathUtils.random(lastSpawnPos
+							+ Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
+					obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));// MathUtils.random(FLOOR_HEIGHT,
+																						// FLOOR_HEIGHT
+																						// +
+																						// 60)));
+					lastSpawnTime = TimeUtils.nanoTime();
+				}
 
-		for (int i = 0; i < obstacles.size(); i++) {
-			// Debug
-			obstacles.get(i).drawHitbox();
-			if (obstacles.get(i).isOffScreen()) {
-				obstacles.remove(i);
-			}
-			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
-				endGame();
-			}
+				for (int i = 0; i < obstacles.size(); i++) {
+					// Debug
+					obstacles.get(i).drawHitbox();
+					if (obstacles.get(i).isOffScreen()) {
+						obstacles.remove(i);
+					}
+					if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
+						endGame();
+					}
 
-		}
+				}
 
-		// Debug
-		runner.drawHitbox();
+				// Debug
+				runner.drawHitbox();
 
 	}
 
