@@ -180,6 +180,9 @@ public class Runner {
 		if (state == State.jumping) {
 			speedY += jumpSpeed;
 		}
+		if (state == State.ducking) {
+			speedY += jumpSpeed;
+		}
 		released = false;
 	}
 
