@@ -178,7 +178,7 @@ public class MyGdxGame implements ApplicationListener {
 		batch.end();
 
 		// Input
-		if (Gdx.input.isKeyPressed(Keys.UP)) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			runner.jump();
 		}
 		else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
@@ -189,11 +189,11 @@ public class MyGdxGame implements ApplicationListener {
 			runner.release();
 		}
 		
-		//generate random seletion for obstacle to be on floor or mid height.
+		//generate random selection for obstacle to be on floor or mid height.
 		spawnPositionRandom = MathUtils.random(1,2);
 		if(spawnPositionRandom == 1)
 		{
-			spawnPositionY = FLOOR_HEIGHT + 60;
+			spawnPositionY = FLOOR_HEIGHT + 50;
 		}
 		else 
 		{
@@ -201,12 +201,14 @@ public class MyGdxGame implements ApplicationListener {
 		}
 		
 		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.WIDTH * 3, lastSpawnPos + RESW);
+			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
 			obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));//MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
 			lastSpawnTime = TimeUtils.nanoTime();
 		}
 
 		for (int i = 0; i < obstacles.size(); i++) {
+			//Debug
+			obstacles.get(i).drawHitbox();
 			if (obstacles.get(i).isOffScreen()) {
 				obstacles.remove(i);
 			}
@@ -214,7 +216,11 @@ public class MyGdxGame implements ApplicationListener {
 				endGame();
 			}
 			
+			
 		}
+		
+		//Debug
+		runner.drawHitbox();
 
 	}
 

@@ -1,14 +1,17 @@
 package com.me.mygdxgame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class Runner {
-	private static final float JUMP_HEIGHT = 5;
+	private static final float JUMP_HEIGHT = 6;
 	private Texture currentSprite;
 	private Texture runningSprite[];
 	private Texture jumpingSprite[];
@@ -27,9 +30,13 @@ public class Runner {
 	private float floorHeight;
 	private int posX = -300;
 	private float speedY;
-	private final float gravity = -1;
+	private final float gravity = -1.3f;
 	private float jumpSpeed;
 	protected boolean released;
+	
+	//Debug
+	ShapeRenderer shapeRenderer;
+	//End Debug
 
 	enum State {
 		jumping, running, dead, ducking
@@ -75,6 +82,9 @@ public class Runner {
 		animationIndex = 0;
 		lastFrameTime = TimeUtils.nanoTime();
 		state = State.running;
+		
+		//Debug
+		shapeRenderer = new ShapeRenderer();
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -113,10 +123,18 @@ public class Runner {
 			} else {
 				animationIndex++;
 			}
-
+			
 			lastFrameTime = TimeUtils.nanoTime();
 		}
-
+		
+	}
+	
+	public void drawHitbox() {
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Rectangle);
+		shapeRenderer.setColor(Color.BLACK);
+		shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+		shapeRenderer.end();
 	}
 
 	public void floorCheck() {
@@ -136,6 +154,7 @@ public class Runner {
 		}
 
 	}
+	
 
 	public void dispose() {
 		currentSprite.dispose();
@@ -158,7 +177,7 @@ public class Runner {
 		if (state == State.running && released == true) {
 			speedY += jumpSpeed;
 		}
-		if (state == State.jumping && released == false) {
+		if (state == State.jumping) {
 			speedY += jumpSpeed;
 		}
 		released = false;
@@ -177,10 +196,10 @@ public class Runner {
 	}
 
 	public void duck() {
-		hitbox.setHeight(SPRITE_WIDTH);
-		hitbox.setHeight(SPRITE_HEIGHT);
 		if (state == State.running) {
 			state = State.ducking;
+			hitbox.setHeight(SPRITE_WIDTH);
+			hitbox.setWidth(SPRITE_WIDTH);
 		}
 
 	}
