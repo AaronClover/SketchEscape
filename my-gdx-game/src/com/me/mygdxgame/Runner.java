@@ -34,6 +34,7 @@ public class Runner {
 	private float jumpSpeed;
 	protected boolean released;
 	
+	
 	//Debug
 	ShapeRenderer shapeRenderer;
 	//End Debug

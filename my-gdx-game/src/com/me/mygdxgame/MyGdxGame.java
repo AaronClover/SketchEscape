@@ -176,15 +176,25 @@ public class MyGdxGame implements ApplicationListener {
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.end();
-
 		// Input
+		System.out.println("Space " +Gdx.input.isKeyPressed(Keys.SPACE) + " Down Arrow " + Gdx.input.isKeyPressed(Keys.DOWN) + " Just Touched " + Gdx.input.justTouched());
+		Gdx.input.isTouched();
+		
+		Gdx.input.justTouched();
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			runner.jump();
 		}
 		else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			runner.duck();
 		} else if (Gdx.input.isTouched()) {
-			runner.jump();
+			//If user touches left side of the screen then Runner Ducks
+			if(Gdx.input.getX() < 400) {
+				runner.duck();
+			}
+			//user touches right side of the screen then Jump.
+			else if(Gdx.input.getX() >= 400) {
+				runner.jump();
+			}
 		} else {
 			runner.release();
 		}
