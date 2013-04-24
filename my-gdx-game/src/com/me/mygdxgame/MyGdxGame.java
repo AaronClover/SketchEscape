@@ -1,4 +1,5 @@
 package com.me.mygdxgame;
+
 //test
 import java.util.ArrayList;
 
@@ -66,7 +67,7 @@ public class MyGdxGame implements ApplicationListener {
 	private float lastSpawnPos;
 	private float spawnPositionY;
 	private int spawnPositionRandom;
-	
+
 	// Current game timer
 	private float timer;
 
@@ -149,8 +150,6 @@ public class MyGdxGame implements ApplicationListener {
 		camera.position.add(RUN_SPEED, 0, 0);
 		camera.update();
 
-		
-
 		// if (timer >= (float)15/2 && played == false) {
 		// music2.play();
 		// played = true;
@@ -158,9 +157,9 @@ public class MyGdxGame implements ApplicationListener {
 
 		// Updates
 		runner.update();
-		
+
 		if (floorPosX[0] < camera.position.x - RESW * 1.5) {
-			floorPosX[0] = camera.position.x + RESW / 2 -8;
+			floorPosX[0] = camera.position.x + RESW / 2 - 8;
 		}
 		if (floorPosX[1] < camera.position.x - RESW * 1.5) {
 			floorPosX[1] = camera.position.x + RESW / 2 - 8;
@@ -177,47 +176,45 @@ public class MyGdxGame implements ApplicationListener {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.end();
 		// Input
-		System.out.println("Space " +Gdx.input.isKeyPressed(Keys.SPACE) + " Down Arrow " + Gdx.input.isKeyPressed(Keys.DOWN) + " Just Touched " + Gdx.input.justTouched());
-		Gdx.input.isTouched();
-		
+
 		Gdx.input.justTouched();
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			runner.jump();
-		}
-		else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 			runner.duck();
 		} else if (Gdx.input.isTouched()) {
-			//If user touches left side of the screen then Runner Ducks
-			if(Gdx.input.getX() < 400) {
+			// If user touches left side of the screen then Runner Ducks
+			if (Gdx.input.getX() < 400) {
 				runner.duck();
 			}
-			//user touches right side of the screen then Jump.
-			else if(Gdx.input.getX() >= 400) {
+			// user touches right side of the screen then Jump.
+			else if (Gdx.input.getX() >= 400) {
 				runner.jump();
 			}
 		} else {
 			runner.release();
 		}
-		
-		//generate random selection for obstacle to be on floor or mid height.
-		spawnPositionRandom = MathUtils.random(1,2);
-		if(spawnPositionRandom == 1)
-		{
+
+		// generate random selection for obstacle to be on floor or mid height.
+		spawnPositionRandom = MathUtils.random(1, 2);
+		if (spawnPositionRandom == 1) {
 			spawnPositionY = FLOOR_HEIGHT + 50;
-		}
-		else 
-		{
+		} else {
 			spawnPositionY = FLOOR_HEIGHT;
 		}
-		
+
 		if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-			lastSpawnPos = MathUtils.random(lastSpawnPos + Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
-			obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));//MathUtils.random(FLOOR_HEIGHT, FLOOR_HEIGHT + 60)));
+			lastSpawnPos = MathUtils.random(lastSpawnPos
+					+ Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
+			obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));// MathUtils.random(FLOOR_HEIGHT,
+																				// FLOOR_HEIGHT
+																				// +
+																				// 60)));
 			lastSpawnTime = TimeUtils.nanoTime();
 		}
 
 		for (int i = 0; i < obstacles.size(); i++) {
-			//Debug
+			// Debug
 			obstacles.get(i).drawHitbox();
 			if (obstacles.get(i).isOffScreen()) {
 				obstacles.remove(i);
@@ -225,18 +222,17 @@ public class MyGdxGame implements ApplicationListener {
 			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
 				endGame();
 			}
-			
-			
+
 		}
-		
-		//Debug
+
+		// Debug
 		runner.drawHitbox();
 
 	}
 
 	private void endGame() {
 		create();
-		
+
 	}
 
 	@Override
