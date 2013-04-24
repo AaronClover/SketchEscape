@@ -97,6 +97,7 @@ public class Runner {
 			if (animationIndex > duckingSprite.length - 1) {
 				animationIndex = 0;
 			}
+			currentSprite = duckingSprite[animationIndex];
 		case dead:
 			break;
 		default:
