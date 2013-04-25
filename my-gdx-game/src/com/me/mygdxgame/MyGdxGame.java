@@ -4,14 +4,20 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
 public class MyGdxGame extends Game {
-	Screen gameScreen;
-	Screen splash;
+	private GameScreen game;
+	private SplashScreen splash;
 	
 
 	@Override
 	public void create() {
-		//TODO load assets
+		splash = new SplashScreen(this);
+		game = new GameScreen();
+		setScreen(splash);
 		
 	}
+	
+	public Screen getGameScreen() {
+		return game;
+	} 
 	
 }

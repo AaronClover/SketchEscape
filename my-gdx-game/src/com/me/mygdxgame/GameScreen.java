@@ -1,9 +1,7 @@
 package com.me.mygdxgame;
 
-//test
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -18,110 +16,30 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class MyGdxScreen implements Screen{
-	/*
-	 * Assets
-	 * 
-	 * Assets are things such as Images, music
-	 * 
-	 * All assets are stored in the Android project folder under assets
-	 */
-	Splash splash;
-	// Textures
-	private Texture floor;
-	private Texture background;
-
-	// Music
-	private Music music1;
-	private Music music2;
-
-	// Sound
-
-	/*
-	 * End Assets
-	 */
-
-	private static final float RUN_SPEED = 8;
-
-	// Fonts
-	private BitmapFont font;
-
-	// This will determine what we see on the screen and also pans the view
-	private OrthographicCamera camera;
-
-	// Used to render sprites
-	private SpriteBatch batch;
-
-	// Used to determine where mouse/finger is pressed
-	private Vector3 touchPos = new Vector3();
-
-	/*
-	 * In game objects
-	 */
-	private ArrayList<Obstacle> obstacles;
-	private Runner runner;
-	/*
-	 * End in game objects
-	 */
-
-	// Used as a timer for spawning obstacles
-	private long lastSpawnTime;
-	private float lastSpawnPos;
-	private float spawnPositionY;
-	private int spawnPositionRandom;
-
-	// Current game timer
-	private float timer;
-
-	// Current game score
-	private int score;
-
-	// Resolution Width
-	public final int RESW = 800;
-	// Resolution Height
-	public final int RESH = 480;
-
-	// private boolean played;
-
-	// Position of the floor
-	private final float FLOOR_HEIGHT = 30;
-	private float floorPosX[];
-	// Position of background
-	private float backgroundPosX[];
-
-	/*
-	 * The asset manager requires you to type more code, but allows you to
-	 * prevent crashes caused by trying to use an asset before it's fully
-	 * loaded.
-	 */
-	AssetManager manager = new AssetManager();
-
-	// The create class is called when the application is launched. It's not
-	// exactly a main class
-	@Override
+public class GameScreen extends MyScreen{
+		public GameScreen(){
+		create();
+	}
+	
 	public void create() {
-		splash = new Splash(this);
-		setScreen(splash);
-		// dropSound =
 		// Gdx.audio.newSound(Gdx.files.internal("data/waterdrop.wav"));
-		// rainMusic =
 		// Gdx.audio.newMusic(Gdx.files.internal("data/music/01-TRACK 2.wav"));
 		// music2 = Gdx.audio.newMusic(Gdx.files.internal("data/music/2.mp3"));
-		manager.load("data/music/1.mp3", Music.class);
-		manager.load("data/music/2.mp3", Music.class);
+		//manager.load("data/music/1.mp3", Music.);
+		//manager.load("data/music/2.mp3", Music.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/whitepaper.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
-		music1 = manager.get("data/music/1.mp3", Music.class);
-		music2 = manager.get("data/music/2.mp3", Music.class);
+		//music1 = manager.get("data/music/1.mp3", Music.class);
+		//music2 = manager.get("data/music/2.mp3", Music.class);
 		floor = manager.get("data/floor.png", Texture.class);
 		background = manager.get("data/whitepaper.png", Texture.class);
 
-		music2.setLooping(true);
+		//music2.setLooping(true);
 
-		music1.setLooping(true);
+		//sicmusic1.setLooping(true);
 		// rainMusic.play();
 
 		camera = new OrthographicCamera();
@@ -151,7 +69,7 @@ public class MyGdxScreen implements Screen{
 	}
 
 	@Override
-	public void render() {
+	public void render(float delta){
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -287,12 +205,6 @@ public class MyGdxScreen implements Screen{
 	public void resume() {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void render(float delta) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
