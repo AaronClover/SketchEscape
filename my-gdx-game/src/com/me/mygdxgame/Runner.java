@@ -33,6 +33,7 @@ public class Runner {
 	private final float gravity = -1.3f;
 	private float jumpSpeed;
 	protected boolean released;
+	long beginningOfRoll;
 	
 	
 	//Debug
@@ -89,44 +90,10 @@ public class Runner {
 	}
 
 	public void draw(SpriteBatch batch) {
-		switch (state) {
-		case running:
-			if (animationIndex > runningSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = runningSprite[animationIndex];
-			break;
-
-		case jumping:
-			if (animationIndex > jumpingSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = jumpingSprite[animationIndex];
-			break;
-
-		case ducking:
-			if (animationIndex > duckingSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = duckingSprite[animationIndex];
-		case dead:
-			break;
-		default:
-			break;
-		}
+		
 
 		batch.draw(currentSprite, hitbox.x, hitbox.y);
-		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
-			if (state == State.jumping) {
-				if (animationIndex < jumpingSprite.length - 1) {
-					animationIndex++;
-				}
-			} else {
-				animationIndex++;
-			}
-			
-			lastFrameTime = TimeUtils.nanoTime();
-		}
+		
 		
 	}
 	
@@ -168,10 +135,50 @@ public class Runner {
 	}
 
 	public void update() {
+		//Handles changing sprites for animation
+		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
+			if (state == State.jumping) {
+				if (animationIndex < jumpingSprite.length - 1) {
+					animationIndex++;
+				}
+			} else {
+				animationIndex++;
+			}
+			
+			lastFrameTime = TimeUtils.nanoTime();
+		}
+		
 		speedY += gravity;
 		hitbox.y += speedY;
 		hitbox.x = camera.position.x + posX;
 		floorCheck();
+		
+		//Changes sprite set to the runner's state
+		switch (state) {
+		case running:
+			if (animationIndex > runningSprite.length - 1) {
+				animationIndex = 0;
+			}
+			currentSprite = runningSprite[animationIndex];
+			break;
+
+		case jumping:
+			if (animationIndex > jumpingSprite.length - 1) {
+				animationIndex = 0;
+			}
+			currentSprite = jumpingSprite[animationIndex];
+			break;
+
+		case ducking:
+			if (animationIndex > duckingSprite.length - 1) {
+				animationIndex = 0;
+			}
+			currentSprite = duckingSprite[animationIndex];
+		case dead:
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void jump() {
@@ -201,9 +208,11 @@ public class Runner {
 
 	public void duck() {
 		if (state == State.running) {
+			beginningOfRoll = TimeUtils.nanoTime();
 			state = State.ducking;
 			hitbox.setHeight(SPRITE_WIDTH);
 			hitbox.setWidth(SPRITE_WIDTH);
+
 		}
 
 	}
