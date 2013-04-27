@@ -34,7 +34,7 @@ public class MyScreen implements Screen{
 	 * End Assets
 	 */
 
-	protected static final float RUN_SPEED = 8;
+	protected static final float RUN_SPEED = 10;
 
 	// Fonts
 	protected BitmapFont font;

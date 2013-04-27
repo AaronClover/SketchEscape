@@ -2,6 +2,7 @@ package com.me.mygdxgame;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -16,30 +17,30 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class GameScreen extends MyScreen{
-		public GameScreen(){
+public class GameScreen extends MyScreen {
+	public GameScreen() {
 		create();
 	}
-	
+
 	public void create() {
 		// Gdx.audio.newSound(Gdx.files.internal("data/waterdrop.wav"));
 		// Gdx.audio.newMusic(Gdx.files.internal("data/music/01-TRACK 2.wav"));
 		// music2 = Gdx.audio.newMusic(Gdx.files.internal("data/music/2.mp3"));
-		//manager.load("data/music/1.mp3", Music.);
-		//manager.load("data/music/2.mp3", Music.class);
+		// manager.load("data/music/1.mp3", Music.);
+		// manager.load("data/music/2.mp3", Music.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/whitepaper.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
-		//music1 = manager.get("data/music/1.mp3", Music.class);
-		//music2 = manager.get("data/music/2.mp3", Music.class);
+		// music1 = manager.get("data/music/1.mp3", Music.class);
+		// music2 = manager.get("data/music/2.mp3", Music.class);
 		floor = manager.get("data/floor.png", Texture.class);
 		background = manager.get("data/whitepaper.png", Texture.class);
 
-		//music2.setLooping(true);
+		// music2.setLooping(true);
 
-		//sicmusic1.setLooping(true);
+		// sicmusic1.setLooping(true);
 		// rainMusic.play();
 
 		camera = new OrthographicCamera();
@@ -69,7 +70,7 @@ public class GameScreen extends MyScreen{
 	}
 
 	@Override
-	public void render(float delta){
+	public void render(float delta) {
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -121,62 +122,77 @@ public class GameScreen extends MyScreen{
 		batch.end();
 
 		// Input
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+				runner.jump();
+			} else {
+				runner.jumpRelease();
+			}
+			if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+				runner.duck();
+			} else {
+				runner.duckRelease();
+			}
+		}
+		
+		if (Gdx.input.isTouched()) {
+			// If user touches left side of the screen then Runner Ducks
+			if (Gdx.input.getX() < 400) {
+				runner.duck();
+			} else {
+				runner.duckRelease();
+			}
+			// user touches right side of the screen then Jump.
+			if (Gdx.input.getX() >= 400) {
+				runner.jump();
+			} else {
+				runner.jumpRelease();
+			}
+		} else {
+			runner.jumpRelease();
+			runner.duckRelease();
+		}
 
-				Gdx.input.justTouched();
-				if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-					runner.jump();
-				} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-					runner.duck();
-				} else if (Gdx.input.isTouched()) {
-					// If user touches left side of the screen then Runner Ducks
-					if (Gdx.input.getX() < 400) {
-						runner.duck();
-					}
-					// user touches right side of the screen then Jump.
-					else if (Gdx.input.getX() >= 400) {
-						runner.jump();
-					}
-				} else {
-					runner.release();
-				}
+		// generate random selection for obstacle to be on floor or mid height.
+		spawnPositionRandom = MathUtils.random(1, 2);
+		if (spawnPositionRandom == 1) {
+			spawnPositionY = FLOOR_HEIGHT + 50;
+		} else {
+			spawnPositionY = FLOOR_HEIGHT;
+		}
 
-				// generate random selection for obstacle to be on floor or mid height.
-				spawnPositionRandom = MathUtils.random(1, 2);
-				if (spawnPositionRandom == 1) {
-					spawnPositionY = FLOOR_HEIGHT + 50;
-				} else {
-					spawnPositionY = FLOOR_HEIGHT;
-				}
+		// if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
+		// lastSpawnPos = MathUtils.random(lastSpawnPos
+		// + Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
+		// obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));
+		// lastSpawnTime = TimeUtils.nanoTime();
+		// }
+		if (obstacles.size() < 10) {
+			obstacles.add(new Obstacle(camera, lastSpawnPos + 256,
+					spawnPositionY));
+			lastSpawnPos = obstacles.get(obstacles.size()-1).hitbox.x;
+		}
 
-				if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-					lastSpawnPos = MathUtils.random(lastSpawnPos
-							+ Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
-					obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));// MathUtils.random(FLOOR_HEIGHT,
-																						// FLOOR_HEIGHT
-																						// +
-																						// 60)));
-					lastSpawnTime = TimeUtils.nanoTime();
-				}
+		for (int i = 0; i < obstacles.size(); i++) {
+			// Debug
+			obstacles.get(i).drawHitbox();
+			if (obstacles.get(i).isOffScreen()) {
+				obstacles.remove(i);
+			}
+			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
+				endGame();
+			}
 
-				for (int i = 0; i < obstacles.size(); i++) {
-					// Debug
-					obstacles.get(i).drawHitbox();
-					if (obstacles.get(i).isOffScreen()) {
-						obstacles.remove(i);
-					}
-					if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
-						endGame();
-					}
+		}
 
-				}
-
-				// Debug
-				runner.drawHitbox();
+		// Debug
+		runner.drawHitbox();
 
 	}
 
 	private void endGame() {
 		create();
+		System.gc(); // Garbage collector
 
 	}
 
@@ -210,12 +226,12 @@ public class GameScreen extends MyScreen{
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

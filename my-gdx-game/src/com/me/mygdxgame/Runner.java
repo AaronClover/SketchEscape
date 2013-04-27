@@ -30,9 +30,10 @@ public class Runner {
 	private float floorHeight;
 	private int posX = -300;
 	private float speedY;
-	private final float gravity = -1.3f;
+	private final float gravity = -1.5f;
 	private float jumpSpeed;
-	protected boolean released;
+	private boolean jumpReleased;
+	private boolean duckReleased;
 	long beginningOfRoll;
 	
 	
@@ -45,6 +46,7 @@ public class Runner {
 	};
 
 	State state;
+	
 
 	// Debug
 
@@ -62,9 +64,7 @@ public class Runner {
 				new Texture(Gdx.files.internal("data/bearsum/walk1.png")),
 				new Texture(Gdx.files.internal("data/bearsum/walk2.png")),
 				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk4.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk2.png"))};
+				new Texture(Gdx.files.internal("data/bearsum/walk4.png"))};
 		runningSprite = walkingInit;
 		Texture jumpingInit[] = {
 				new Texture(Gdx.files.internal("data/bearsum/jump1.png")),
@@ -105,23 +105,7 @@ public class Runner {
 		shapeRenderer.end();
 	}
 
-	public void floorCheck() {
-		if (speedY > 0) {
-			state = state.jumping;
-			jumpSpeed *= 0.70;
-		} else {
-			if (hitbox.y <= floorHeight) {
-				if (state != State.ducking) {
-					state = state.running;
-				}
-				jumpSpeed = JUMP_HEIGHT;
-				hitbox.y = floorHeight;
-				speedY = 0;
-			
-			}
-		}
 
-	}
 	
 
 	public void dispose() {
@@ -135,8 +119,41 @@ public class Runner {
 	}
 
 	public void update() {
+		
+		hitbox.y += speedY;
+		speedY += gravity;
+		hitbox.x = camera.position.x + posX;
+		
+		if (speedY > 0) {
+			jumpSpeed *= 0.88;
+		} else {
+			//Checks floor 
+			if (hitbox.y <= floorHeight) {
+				if (state != State.ducking) {
+					state = state.running;
+				}
+				if (jumpReleased == true) {
+					jumpSpeed = JUMP_HEIGHT;
+				}
+				hitbox.y = floorHeight;
+				speedY = 0;
+			
+			}
+		}
+		speedY += gravity;
+		hitbox.y += speedY;
+		hitbox.x = camera.position.x + posX;
+		
+		if (state == State.ducking) {
+			if (TimeUtils.nanoTime() - beginningOfRoll > 500000000) {
+				state = State.running;
+				hitbox.setHeight(SPRITE_HEIGHT);
+				hitbox.setWidth(SPRITE_WIDTH);
+			}
+		}
+		
 		//Handles changing sprites for animation
-		if (TimeUtils.nanoTime() - lastFrameTime >= 100000000) {
+		if (TimeUtils.nanoTime() - lastFrameTime >= 50000000) {
 			if (state == State.jumping) {
 				if (animationIndex < jumpingSprite.length - 1) {
 					animationIndex++;
@@ -148,10 +165,7 @@ public class Runner {
 			lastFrameTime = TimeUtils.nanoTime();
 		}
 		
-		speedY += gravity;
-		hitbox.y += speedY;
-		hitbox.x = camera.position.x + posX;
-		floorCheck();
+		
 		
 		//Changes sprite set to the runner's state
 		switch (state) {
@@ -182,39 +196,35 @@ public class Runner {
 	}
 
 	public void jump() {
-		if (state == State.running && released == true) {
-			speedY += jumpSpeed;
-		}
-		if (state == State.jumping) {
-			speedY += jumpSpeed;
-		}
-		if (state == State.ducking) {
-			speedY += jumpSpeed;
-		}
-		released = false;
-	}
-
-	public void release() {
-		if (state == State.running) {
-			released = true;
-		}
-		if (state == State.ducking) {
+		if (state != State.jumping && jumpReleased == true) {
+			state = State.jumping;
 			hitbox.setHeight(SPRITE_HEIGHT);
 			hitbox.setWidth(SPRITE_WIDTH);
-			state = State.running;
+			jumpReleased = false;
 		}
+		
+		speedY += jumpSpeed;
+		
+	}
+
+	public void jumpRelease() {
+		jumpReleased = true;
 
 	}
 
 	public void duck() {
-		if (state == State.running) {
+		if (state != State.jumping && duckReleased == true) {
 			beginningOfRoll = TimeUtils.nanoTime();
 			state = State.ducking;
 			hitbox.setHeight(SPRITE_WIDTH);
 			hitbox.setWidth(SPRITE_WIDTH);
-
+			duckReleased = false;
 		}
 
+	}
+
+	public void duckRelease() {
+		duckReleased = true;
 	}
 
 }
