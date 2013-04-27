@@ -175,7 +175,7 @@ public class GameScreen extends MyScreen {
 
 		for (int i = 0; i < obstacles.size(); i++) {
 			// Debug
-			obstacles.get(i).drawHitbox();
+			//obstacles.get(i).drawHitbox();
 			if (obstacles.get(i).isOffScreen()) {
 				obstacles.remove(i);
 			}
@@ -186,7 +186,7 @@ public class GameScreen extends MyScreen {
 		}
 
 		// Debug
-		runner.drawHitbox();
+		//runner.drawHitbox();
 
 	}
 
