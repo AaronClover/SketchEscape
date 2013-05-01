@@ -16,12 +16,15 @@ public class Runner {
 	private Texture runningSprite[];
 	private Texture jumpingSprite[];
 	private Texture duckingSprite[];
+	private Texture deadSprite[];
 	private int animationIndex;
 	private float lastFrameTime;
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
-	final int SPRITE_WIDTH = 43;
+	final int JUMP_WIDTH = 24;
+	final int DUCK_HEIGHT = 43;
+	final int SPRITE_WIDTH = 58;
 	final int SPRITE_HEIGHT = 60;
 	final int SCALE = 1; // Only affects hit box at the moment
 	final int WIDTH = SPRITE_WIDTH * SCALE;
@@ -61,23 +64,35 @@ public class Runner {
 	public void create() {
 		speedY = 0;
 		Texture walkingInit[] = {
-				new Texture(Gdx.files.internal("data/bearsum/walk1.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk2.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk3.png")),
-				new Texture(Gdx.files.internal("data/bearsum/walk4.png"))};
+				new Texture(Gdx.files.internal("data/runner/running/1.png")),
+				new Texture(Gdx.files.internal("data/runner/running/2.png")),
+				new Texture(Gdx.files.internal("data/runner/running/3.png")),
+				new Texture(Gdx.files.internal("data/runner/running/4.png")),
+				new Texture(Gdx.files.internal("data/runner/running/5.png")),
+				new Texture(Gdx.files.internal("data/runner/running/6.png"))};
 		runningSprite = walkingInit;
 		Texture jumpingInit[] = {
-				new Texture(Gdx.files.internal("data/bearsum/jump1.png")),
-				new Texture(Gdx.files.internal("data/bearsum/jump2.png")),
-				new Texture(Gdx.files.internal("data/bearsum/jump3.png")) };
+				new Texture(Gdx.files.internal("data/runner/jumping/1.png")),
+				new Texture(Gdx.files.internal("data/runner/jumping/2.png")),
+				new Texture(Gdx.files.internal("data/runner/jumping/3.png")) };
 		jumpingSprite = jumpingInit;
 		Texture duckingInit[] = { 
-				new Texture(Gdx.files.internal("data/bearsum/roll1.png")),
-				new Texture(Gdx.files.internal("data/bearsum/roll2.png")),
-				new Texture(Gdx.files.internal("data/bearsum/roll3.png")),
-				new Texture(Gdx.files.internal("data/bearsum/roll4.png")),
-				new Texture(Gdx.files.internal("data/bearsum/roll5.png")) };
+				new Texture(Gdx.files.internal("data/runner/rolling/1.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/2.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/3.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/4.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/5.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/6.png")),
+				new Texture(Gdx.files.internal("data/runner/rolling/7.png"))};
 		duckingSprite = duckingInit;
+		Texture deadInit[] = {
+				new Texture(Gdx.files.internal("data/runner/dead/1.png")),
+				new Texture(Gdx.files.internal("data/runner/dead/2.png")),
+				new Texture(Gdx.files.internal("data/runner/dead/3.png")),
+				new Texture(Gdx.files.internal("data/runner/dead/4.png")),
+				new Texture(Gdx.files.internal("data/runner/dead/5.png")),
+				new Texture(Gdx.files.internal("data/runner/dead/6.png"))};
+		deadSprite = deadInit;
 		
 		hitbox = new Rectangle(camera.position.x + posX, floorHeight,
 				SPRITE_WIDTH, SPRITE_HEIGHT);
@@ -129,8 +144,11 @@ public class Runner {
 		} else {
 			//Checks floor 
 			if (hitbox.y <= floorHeight) {
-				if (state != State.ducking) {
+				if (state != State.ducking && state != State.dead) {
+					if (state == State.jumping)
+						hitbox.setWidth(SPRITE_WIDTH);
 					state = state.running;
+					
 				}
 				if (jumpReleased == true) {
 					jumpSpeed = JUMP_HEIGHT;
@@ -152,18 +170,7 @@ public class Runner {
 			}
 		}
 		
-		//Handles changing sprites for animation
-		if (TimeUtils.nanoTime() - lastFrameTime >= 50000000) {
-			if (state == State.jumping) {
-				if (animationIndex < jumpingSprite.length - 1) {
-					animationIndex++;
-				}
-			} else {
-				animationIndex++;
-			}
-			
-			lastFrameTime = TimeUtils.nanoTime();
-		}
+		
 		
 		
 		
@@ -188,18 +195,42 @@ public class Runner {
 				animationIndex = 0;
 			}
 			currentSprite = duckingSprite[animationIndex];
+			break;
 		case dead:
+			if (animationIndex > deadSprite.length - 1) {
+				animationIndex = 0;
+			}
+			currentSprite = deadSprite[animationIndex];
 			break;
 		default:
 			break;
 		}
+		
+		//Handles changing sprites for animation
+				if (TimeUtils.nanoTime() - lastFrameTime >= 80000000) {
+					if (state == State.jumping) {
+						if (animationIndex < jumpingSprite.length - 1) {
+							animationIndex++;
+						}
+					}
+					else if (state == State.dead) {
+						if (animationIndex < deadSprite.length -1) {
+							animationIndex++;
+						}
+					}
+					else {
+						animationIndex++;
+					}
+					
+					lastFrameTime = TimeUtils.nanoTime();
+				} 
 	}
 
 	public void jump() {
 		if (state != State.jumping && jumpReleased == true) {
 			state = State.jumping;
 			hitbox.setHeight(SPRITE_HEIGHT);
-			hitbox.setWidth(SPRITE_WIDTH);
+			hitbox.setWidth(JUMP_WIDTH);
 			jumpReleased = false;
 		}
 		
@@ -216,7 +247,7 @@ public class Runner {
 		if (state != State.jumping && duckReleased == true) {
 			beginningOfRoll = TimeUtils.nanoTime();
 			state = State.ducking;
-			hitbox.setHeight(SPRITE_WIDTH);
+			hitbox.setHeight(DUCK_HEIGHT);
 			hitbox.setWidth(SPRITE_WIDTH);
 			duckReleased = false;
 		}

@@ -16,13 +16,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.me.mygdxgame.Runner.State;
 
 public class GameScreen extends MyScreen {
+	protected static float runSpeed;
 	public GameScreen() {
 		create();
 	}
 
 	public void create() {
+		runSpeed =10;
 		// Gdx.audio.newSound(Gdx.files.internal("data/waterdrop.wav"));
 		// Gdx.audio.newMusic(Gdx.files.internal("data/music/01-TRACK 2.wav"));
 		// music2 = Gdx.audio.newMusic(Gdx.files.internal("data/music/2.mp3"));
@@ -76,7 +79,7 @@ public class GameScreen extends MyScreen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Moves player
-		camera.position.add(RUN_SPEED, 0, 0);
+		camera.position.add(runSpeed, 0, 0);
 		camera.update();
 
 		// Moves background to appear to be moving slower
@@ -191,8 +194,13 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void endGame() {
-		create();
-		System.gc(); // Garbage collector
+		//create();
+		runner.state = State.dead;
+		runSpeed = 0;
+		if (Gdx.input.isKeyPressed(Keys.ANY_KEY) || Gdx.input.isTouched()) {
+			create();
+			System.gc(); // Garbage collector
+		}
 
 	}
 
