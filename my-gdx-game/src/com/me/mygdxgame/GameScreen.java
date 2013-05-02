@@ -18,7 +18,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class GameScreen extends MyScreen {
-	public GameScreen() {
+	private Texture gameControl; 
+	private MyGdxGame game;
+	private float gameControlPosX[]; 
+	
+	public GameScreen(MyGdxGame game) {
+		this.game = game;
 		create();
 	}
 
@@ -31,13 +36,14 @@ public class GameScreen extends MyScreen {
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/whitepaper.png", Texture.class);
+		manager.load("data/pause.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
 		// music1 = manager.get("data/music/1.mp3", Music.class);
 		// music2 = manager.get("data/music/2.mp3", Music.class);
 		floor = manager.get("data/floor.png", Texture.class);
 		background = manager.get("data/whitepaper.png", Texture.class);
-
+		gameControl = manager.get("data/pause.png", Texture.class);
 		// music2.setLooping(true);
 
 		// sicmusic1.setLooping(true);
@@ -54,7 +60,7 @@ public class GameScreen extends MyScreen {
 
 		score = 0;
 		timer = 0;
-
+		
 		// font = new
 		// BitmapFont(Gdx.files.internal("Calibri.fnt"),Gdx.files.internal("Calibri.png"),false);
 		font = new BitmapFont();
@@ -64,10 +70,13 @@ public class GameScreen extends MyScreen {
 
 		backgroundPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
+		
+		gameControlPosX = new float[] { 0, RESH - 50 };
 
-		// played = false;
+		// played = false;	
 
 	}
+	
 
 	@Override
 	public void render(float delta) {
@@ -82,6 +91,10 @@ public class GameScreen extends MyScreen {
 		// Moves background to appear to be moving slower
 		backgroundPosX[0] += 0.5f;
 		backgroundPosX[1] += 0.5f;
+		
+		// Moves pause button so that it stays on the screen.
+		//gameControlPosX[0] += 0.5f;
+		//gameControlPosX[1] += 0.5f;
 
 		// if (timer >= (float)15/2 && played == false) {
 		// music2.play();
@@ -105,7 +118,14 @@ public class GameScreen extends MyScreen {
 		if (backgroundPosX[1] < camera.position.x - RESW * 1.5) {
 			backgroundPosX[1] = camera.position.x + RESW / 2;
 		}
-
+/*		
+		if (gameControlPosX[0] < camera.position.x - RESW * 1.5) {
+			gameControlPosX[0] = camera.position.x + RESW / 2;
+		}
+		if (gameControlPosX[1] < camera.position.x - RESW * 1.5) {
+			gameControlPosX[1] = camera.position.x + RESW / 2;
+		}
+*/
 		// Rendering
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -113,6 +133,8 @@ public class GameScreen extends MyScreen {
 		batch.draw(background, backgroundPosX[1], 0);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
+		batch.draw(gameControl, 0, gameControlPosX[0]);
+		batch.draw(gameControl, 0, gameControlPosX[1]);
 		runner.draw(batch);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -133,9 +155,13 @@ public class GameScreen extends MyScreen {
 			} else {
 				runner.duckRelease();
 			}
-		}
-		
+		}		
 		if (Gdx.input.isTouched()) {
+			int touchedX = Gdx.input.getX();
+			int touchedY = Gdx.input.getY();
+			if ((touchedX >= 0  && touchedX <= 50) && (touchedY >= 0  && touchedY <= 50)){
+				pause();				
+			}
 			// If user touches left side of the screen then Runner Ducks
 			if (Gdx.input.getX() < 400) {
 				runner.duck();
@@ -213,8 +239,10 @@ public class GameScreen extends MyScreen {
 	}
 
 	@Override
-	public void pause() {
-
+	public void pause() {		
+		System.out.println("You Paused");
+		this.game.setScreen(this.game.getSplashScreen());
+		
 	}
 
 	@Override
