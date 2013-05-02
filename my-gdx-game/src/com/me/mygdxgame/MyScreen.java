@@ -80,7 +80,7 @@ public class MyScreen implements Screen{
 	protected final float FLOOR_HEIGHT = 30;
 	protected float floorPosX[];
 	// Position of background
-	protected float backgroundPosX[];
+	protected float backgroundPosX[];	
 
 	/*
 	 * The asset manager requires you to type more code, but allows you to

@@ -11,7 +11,7 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create() {
 		splash = new SplashScreen(this);
-		game = new GameScreen();
+		game = new GameScreen(this);
 		setScreen(splash);
 		
 	}
@@ -19,5 +19,9 @@ public class MyGdxGame extends Game {
 	public Screen getGameScreen() {
 		return game;
 	} 
+	
+	public Screen getSplashScreen() {
+		return splash;
+	}
 	
 }
