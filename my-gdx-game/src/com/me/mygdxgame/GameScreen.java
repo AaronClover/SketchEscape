@@ -140,6 +140,8 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.draw(pauseButton, camera.position.x -RESW/2, pauseButtonHeight);
 		runner.draw(batch);
+		
+		font.draw(batch, String.valueOf(camera.position.x), camera.position.x, RESH/2);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
