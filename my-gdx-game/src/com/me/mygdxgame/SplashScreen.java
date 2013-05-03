@@ -5,13 +5,19 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SplashScreen extends MyScreen{
+	private SpriteBatch spriteBatch;
 	private Texture splash;
 	private MyGdxGame game;
 	
-	SplashScreen(MyGdxGame g) {
-		super(g);
+	public SplashScreen(MyGdxGame g) {
+		//super(g);
+		game = g;
+		spriteBatch = new SpriteBatch();
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, RESW, RESH);
 		splash = new Texture(Gdx.files.internal("data/whitepaper.png"));
 	}
 
@@ -31,11 +37,6 @@ public class SplashScreen extends MyScreen{
 		
 	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	
 

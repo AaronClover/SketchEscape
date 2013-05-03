@@ -26,7 +26,11 @@ public class GameScreen extends MyScreen {
 	private float pauseButtonHeight; 
 	
 	public GameScreen(MyGdxGame g) {
-		super(g);
+		//super(g);
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, RESW, RESH);
+		spriteBatch = new SpriteBatch();
+		game = g;
 		create();
 	}
 
@@ -243,33 +247,10 @@ public class GameScreen extends MyScreen {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void pause() {		
+	public void pause() {
+		super.pause();
 		System.out.println("You Paused");
 		this.game.setScreen(game.getPauseMenu());
-		
 	}
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
-
-	}
 }

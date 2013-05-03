@@ -91,12 +91,12 @@ public class MyScreen implements Screen{
 	 */
 	protected AssetManager manager = new AssetManager();
 
-	MyScreen(MyGdxGame g) {
+	/*MyScreen(MyGdxGame g) {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
 		game = g;
-	}
+	}*/
 	
 	@Override
 	public void render(float delta) {
