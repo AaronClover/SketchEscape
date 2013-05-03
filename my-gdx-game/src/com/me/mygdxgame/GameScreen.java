@@ -23,11 +23,10 @@ public class GameScreen extends MyScreen {
 	//public GameScreen() {
     protected static float runSpeed;
 	private Texture pauseButton; 
-	private MyGdxGame game;
 	private float pauseButtonHeight; 
 	
-	public GameScreen(MyGdxGame game) {
-		this.game = game;
+	public GameScreen(MyGdxGame g) {
+		super(g);
 		create();
 	}
 
@@ -252,7 +251,7 @@ public class GameScreen extends MyScreen {
 	@Override
 	public void pause() {		
 		System.out.println("You Paused");
-		this.game.setScreen(this.game.getSplashScreen());
+		this.game.setScreen(game.getPauseMenu());
 		
 	}
 

@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 public class MyScreen implements Screen{
+	protected MyGdxGame game;
+	protected SpriteBatch spriteBatch;
 	/*
 	 * Assets
 	 * 
@@ -89,6 +91,17 @@ public class MyScreen implements Screen{
 	 */
 	protected AssetManager manager = new AssetManager();
 
+	MyScreen(MyGdxGame g) {
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, RESW, RESH);
+		spriteBatch = new SpriteBatch();
+		game = g;
+	}
+	
+	protected void create(){
+	
+	};
+	
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
