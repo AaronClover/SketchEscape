@@ -98,10 +98,6 @@ public class MyScreen implements Screen{
 		game = g;
 	}
 	
-	protected void create(){
-	
-	};
-	
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
