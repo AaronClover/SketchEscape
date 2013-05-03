@@ -19,17 +19,15 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.me.mygdxgame.Runner.State;
 
 public class GameScreen extends MyScreen {
-<<<<<<< HEAD
-	protected static float runSpeed;
-	public GameScreen() {
-=======
+	
+	//public GameScreen() {
+    protected static float runSpeed;
 	private Texture gameControl; 
 	private MyGdxGame game;
 	private float gameControlPosX[]; 
 	
 	public GameScreen(MyGdxGame game) {
 		this.game = game;
->>>>>>> origin/Aaron
 		create();
 	}
 
