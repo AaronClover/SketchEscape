@@ -22,9 +22,9 @@ public class GameScreen extends MyScreen {
 	
 	//public GameScreen() {
     protected static float runSpeed;
-	private Texture gameControl; 
+	private Texture pauseButton; 
 	private MyGdxGame game;
-	private float gameControlPosX[]; 
+	private float pauseButtonHeight; 
 	
 	public GameScreen(MyGdxGame game) {
 		this.game = game;
@@ -48,7 +48,7 @@ public class GameScreen extends MyScreen {
 		// music2 = manager.get("data/music/2.mp3", Music.class);
 		floor = manager.get("data/floor.png", Texture.class);
 		background = manager.get("data/whitepaper.png", Texture.class);
-		gameControl = manager.get("data/pause.png", Texture.class);
+		pauseButton = manager.get("data/pause.png", Texture.class);
 		// music2.setLooping(true);
 
 		// sicmusic1.setLooping(true);
@@ -76,7 +76,7 @@ public class GameScreen extends MyScreen {
 		backgroundPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
 		
-		gameControlPosX = new float[] { 0, RESH - 50 };
+		pauseButtonHeight = RESH - 50;
 
 		// played = false;	
 
@@ -138,8 +138,7 @@ public class GameScreen extends MyScreen {
 		batch.draw(background, backgroundPosX[1], 0);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
-		batch.draw(gameControl, 0, gameControlPosX[0]);
-		batch.draw(gameControl, 0, gameControlPosX[1]);
+		batch.draw(pauseButton, camera.position.x -RESW/2, pauseButtonHeight);
 		runner.draw(batch);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
