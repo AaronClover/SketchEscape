@@ -2,6 +2,7 @@ package com.me.mygdxgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MyGdxGame extends Game {
 	private GameScreen game;
@@ -26,7 +27,8 @@ public class MyGdxGame extends Game {
 		return splash;
 	}
 
-	public PauseMenu getPauseMenu() {
+	public Screen getPauseMenu(TextureRegion frame) {
+		pauseMenu.setFrame(frame);
 		return pauseMenu;
 	}
 	
