@@ -135,7 +135,7 @@ public class GameScreen extends MyScreen {
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
-				deadRender(delta);
+ 				deadRender(delta);
 			} else {
 				if (Gdx.input.isKeyPressed(Keys.ANY_KEY) || Gdx.input.isTouched()) {
 					create();
@@ -363,5 +363,13 @@ public class GameScreen extends MyScreen {
 
 		// this.game.setScreen(game.getPauseMenu());
 	}
+	
+	 @Override
+	   public boolean keyDown(int keycode) {
+	        if(keycode == Keys.BACK && gameState == GameState.running){
+	           pause();
+	        }
+	        return false;
+	   }
 
 }

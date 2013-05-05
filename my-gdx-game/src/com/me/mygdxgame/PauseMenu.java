@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.me.mygdxgame.GameScreen.GameState;
 
 public class PauseMenu extends MyScreen {
 	private Texture pauseImage;
@@ -22,8 +23,6 @@ public class PauseMenu extends MyScreen {
 
 	@Override
 	public void render(float delta) {
-		// Gdx.gl.glClearColor(0, 0, 0, 0.5f);
-		// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 
 		spriteBatch.setProjectionMatrix(camera.combined);
@@ -34,8 +33,8 @@ public class PauseMenu extends MyScreen {
 		spriteBatch.draw(frame, 0, 0, RESW, RESH);
 		spriteBatch.end();
 		
-		if (Gdx.input.justTouched() || Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
-			game.setScreen(game.getGameScreen());
+		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
+			//game.setScreen(game.getGameScreen());
 		}
 
 	}
@@ -43,5 +42,13 @@ public class PauseMenu extends MyScreen {
 	public void setFrame(TextureRegion f) {
 		frame = f;
 	}
+
+	 @Override
+	   public boolean keyDown(int keycode) {
+	        if(keycode == Keys.BACK){
+	        	game.setScreen(game.getGameScreen());
+	        }
+	        return false;
+	   }
 
 }
