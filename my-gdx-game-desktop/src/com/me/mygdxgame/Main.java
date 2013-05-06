@@ -1,5 +1,6 @@
 package com.me.mygdxgame;
 
+import com.aaronclover.sketchescape.MyGdxGame;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
