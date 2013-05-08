@@ -27,6 +27,7 @@ public class MyScreen implements Screen, InputProcessor{
 	// Textures
 	protected Texture floor;
 	protected Texture background;
+	protected boolean pReleased;
 
 	// Music
 	protected Music music1;

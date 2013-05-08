@@ -162,8 +162,8 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
-
-		font.draw(batch, String.valueOf(camera.position.x), camera.position.x, 0);
+		//Displays score
+		font.draw(batch, String.valueOf(camera.position.x), camera.position.x+RESW/2-100, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
@@ -233,8 +233,9 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
-
-		font.draw(batch, String.valueOf(camera.position.x), camera.position.x, 0);
+		
+		//Draws Score
+		font.draw(batch, String.valueOf((int)(camera.position.x-RESW/2)/100), camera.position.x+RESW/2-100, RESH - 50);
 
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -297,7 +298,12 @@ public class GameScreen extends MyScreen {
 							runner.duckRelease();
 						}
 						if (Gdx.input.isKeyPressed(Keys.P)) {
-							pause();
+							if (pReleased == true) {
+								pReleased = false;
+								pause();
+							}
+						} else {
+							pReleased = true;
 						}
 						if ((touchedX >= 0 && touchedX <= 50)
 								&& (touchedY >= 0 && touchedY <= 50)) {

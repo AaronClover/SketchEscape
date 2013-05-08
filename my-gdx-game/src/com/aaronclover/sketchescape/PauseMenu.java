@@ -19,6 +19,8 @@ public class PauseMenu extends MyScreen {
 		spriteBatch = new SpriteBatch();
 		game = g;
 		pauseImage = new Texture(Gdx.files.internal("data/whitepaper.png"));
+		pReleased = false;
+		
 	}
 
 	@Override
@@ -33,8 +35,13 @@ public class PauseMenu extends MyScreen {
 		spriteBatch.draw(frame, 0, 0, RESW, RESH);
 		spriteBatch.end();
 		
-		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
-			//game.setScreen(game.getGameScreen());
+		if (Gdx.input.isKeyPressed(Keys.P)) {
+			if (pReleased == true) {
+				pReleased = false;
+				game.setScreen(game.getGameScreen());
+			}
+		} else {
+			pReleased = true;
 		}
 
 	}
