@@ -6,6 +6,7 @@ import com.aaronclover.sketchescape.Runner.State;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -70,6 +71,7 @@ public class GameScreen extends MyScreen {
 		timer = 0;
 
 		font = new BitmapFont();
+		font.setColor(Color.BLUE);
 
 		floorPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
