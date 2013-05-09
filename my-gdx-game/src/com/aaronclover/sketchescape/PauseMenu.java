@@ -42,9 +42,8 @@ public class PauseMenu extends MyScreen {
 			}
 		} else {
 			if (Gdx.input.isTouched()) {
-				int touchedX = Gdx.input.getX();
-				int touchedY = Gdx.input.getY();
-
+				int touchedX = Gdx.input.getX()*RESW/Gdx.graphics.getWidth();
+				int touchedY = Gdx.input.getY()*RESH/Gdx.graphics.getHeight();
 				if ((touchedX >= 0 && touchedX <= 50)
 						&& (touchedY >= 0 && touchedY <= 50)) {
 					if (pReleased == true) {
