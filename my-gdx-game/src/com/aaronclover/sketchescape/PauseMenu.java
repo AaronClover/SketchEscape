@@ -18,7 +18,7 @@ public class PauseMenu extends MyScreen {
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
 		game = g;
-		pauseImage = new Texture(Gdx.files.internal("data/whitepaper.png"));
+		pauseImage = new Texture(Gdx.files.internal("data/pause menu.png"));
 		pReleased = false;
 		
 	}
@@ -29,10 +29,11 @@ public class PauseMenu extends MyScreen {
 
 		spriteBatch.setProjectionMatrix(camera.combined);
 		// spriteBatch.begin();
-		// spriteBatch.draw(pauseImage, 0, 0);
+		// 
 		// spriteBatch.end();
 		spriteBatch.begin();
 		spriteBatch.draw(frame, 0, 0, RESW, RESH);
+		spriteBatch.draw(pauseImage, 0, 0);
 		spriteBatch.end();
 		
 		if (Gdx.input.isKeyPressed(Keys.P)) {
