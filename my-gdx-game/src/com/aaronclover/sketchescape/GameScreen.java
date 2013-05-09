@@ -111,32 +111,33 @@ public class GameScreen extends MyScreen {
 		case paused:
 			gameState = GameState.running;
 			if (pauseFrame == null) { // Handles taking the screen shot for
-											// the pause menu
-            pauseFrame = new FrameBuffer(Pixmap.Format.RGB565, RESW, RESH, false);
-            pauseFrameRegion = new TextureRegion(pauseFrame.getColorBufferTexture());
-            pauseFrameRegion.flip(false, true);
-            
-			
+										// the pause menu
+				pauseFrame = new FrameBuffer(Pixmap.Format.RGB565, RESW, RESH,
+						false);
+				pauseFrameRegion = new TextureRegion(
+						pauseFrame.getColorBufferTexture());
+				pauseFrameRegion.flip(false, true);
+
 			}
 			pauseFrame.begin();
-			
-			if (getScreenShot == true) {
-			runningRender(delta);
-			getScreenShot = false;
-			}
-		
-			if(pauseFrame != null)
-		    {
-		        pauseFrame.end();
 
-		        game.setScreen(game.getPauseMenu(pauseFrameRegion));
-		    }  
+			if (getScreenShot == true) {
+				runningRender(delta);
+				getScreenShot = false;
+			}
+
+			if (pauseFrame != null) {
+				pauseFrame.end();
+
+				game.setScreen(game.getPauseMenu(pauseFrameRegion));
+			}
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
- 				deadRender(delta);
+				deadRender(delta);
 			} else {
-				if (Gdx.input.isKeyPressed(Keys.ANY_KEY) || Gdx.input.isTouched()) {
+				if (Gdx.input.isKeyPressed(Keys.ANY_KEY)
+						|| Gdx.input.isTouched()) {
 					create();
 					System.gc(); // Garbage collector
 				}
@@ -162,8 +163,9 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
-		//Displays score
-		font.draw(batch, String.valueOf(camera.position.x), camera.position.x+RESW/2-100, RESH - 50);
+		// Displays score
+		font.draw(batch, String.valueOf(camera.position.x), camera.position.x
+				+ RESW / 2 - 100, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
@@ -196,7 +198,7 @@ public class GameScreen extends MyScreen {
 
 		// Updates
 		runner.update();
-		
+
 		if (Gdx.app.getType() == ApplicationType.Android) {
 			touchInput();
 		} else {
@@ -224,7 +226,7 @@ public class GameScreen extends MyScreen {
 		 * gameControlPosX[1] = camera.position.x + RESW / 2; }
 		 */
 		// Rendering
-		
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
@@ -233,9 +235,11 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
-		
-		//Draws Score
-		font.draw(batch, String.valueOf((int)(camera.position.x-RESW/2)/100), camera.position.x+RESW/2-100, RESH - 50);
+
+		// Draws Score
+		font.draw(batch,
+				String.valueOf((int) (camera.position.x - RESW / 2) / 100),
+				camera.position.x + RESW / 2 - 100, RESH - 50);
 
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -243,9 +247,6 @@ public class GameScreen extends MyScreen {
 		}
 
 		batch.end();
-		
-
-		
 
 		// generate random selection for obstacle to be on floor or mid height.
 		spawnPositionRandom = MathUtils.random(1, 2);
@@ -284,33 +285,43 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void keyboardInput() {
-			int touchedX = Gdx.input.getX();
-			int touchedY = Gdx.input.getY();
-					if (Gdx.app.getType() == ApplicationType.Desktop) {
-						if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-							runner.jump();
-						} else {
-							runner.jumpRelease();
-						}
-						if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-							runner.duck();
-						} else {
-							runner.duckRelease();
-						}
-						if (Gdx.input.isKeyPressed(Keys.P)) {
-							if (pReleased == true) {
-								pReleased = false;
-								pause();
-							}
-						} else {
-							pReleased = true;
-						}
-						if ((touchedX >= 0 && touchedX <= 50)
-								&& (touchedY >= 0 && touchedY <= 50)) {
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+				runner.jump();
+			} else {
+				runner.jumpRelease();
+			}
+			if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+				runner.duck();
+			} else {
+				runner.duckRelease();
+			}
+			//Controls pausing
+			if (Gdx.input.isKeyPressed(Keys.P)) {
+				if (pReleased == true) {
+					pReleased = false;
+					pause();
+				}
+			} else {
+				if (Gdx.input.isTouched()) {
+					int touchedX = Gdx.input.getX();
+					int touchedY = Gdx.input.getY();
+
+					if ((touchedX >= 0 && touchedX <= 50)
+							&& (touchedY >= 0 && touchedY <= 50)) {
+						if (pReleased == true) {
+							pReleased = false;
 							pause();
 						}
 					}
-		
+				} else {
+					pReleased = true;
+				}
+
+			}
+
+		}
+
 	}
 
 	private void touchInput() {
@@ -330,13 +341,12 @@ public class GameScreen extends MyScreen {
 				if (touchedX >= 400) {
 					runner.jump();
 				}
-			}
-			else {
+			} else {
 				runner.jumpRelease();
 				runner.duckRelease();
 			}
-		} 
-		
+		}
+
 	}
 
 	private void endGame() {
@@ -365,13 +375,13 @@ public class GameScreen extends MyScreen {
 
 		// this.game.setScreen(game.getPauseMenu());
 	}
-	
-	 @Override
-	   public boolean keyDown(int keycode) {
-	        if(keycode == Keys.BACK && gameState == GameState.running){
-	           pause();
-	        }
-	        return false;
-	   }
+
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.BACK && gameState == GameState.running) {
+			pause();
+		}
+		return false;
+	}
 
 }

@@ -41,9 +41,22 @@ public class PauseMenu extends MyScreen {
 				game.setScreen(game.getGameScreen());
 			}
 		} else {
-			pReleased = true;
-		}
+			if (Gdx.input.isTouched()) {
+				int touchedX = Gdx.input.getX();
+				int touchedY = Gdx.input.getY();
 
+				if ((touchedX >= 0 && touchedX <= 50)
+						&& (touchedY >= 0 && touchedY <= 50)) {
+					if (pReleased == true) {
+						pReleased = false;
+						game.setScreen(game.getGameScreen());
+					}
+				}
+			} else {
+				pReleased = true;
+			}
+
+		}
 	}
 
 	public void setFrame(TextureRegion f) {
