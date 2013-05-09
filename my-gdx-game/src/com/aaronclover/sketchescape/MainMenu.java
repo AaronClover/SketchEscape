@@ -48,12 +48,15 @@ public class MainMenu extends MyScreen {
 		if (Gdx.input.isTouched()) {
 			int touchX = Gdx.input.getX() * RESW / Gdx.graphics.getWidth();
 			int touchY = Gdx.input.getY() * RESH / Gdx.graphics.getHeight();
-			if (touchX >= playBox.x)
-				if (touchX <= playBox.x + playBox.width)
-					if (touchY >= playBox.y)
+			if (touchX >= playBox.x) {
+				if (touchX <= playBox.x + playBox.width) {
+					if (touchY >= playBox.y) {
 						if (touchY <= RESH - playBox.y + playBox.height) {
 							game.setScreen(game.getGameScreen());
 						}
+					}
+				}
+			}
 		}
 	}
 
