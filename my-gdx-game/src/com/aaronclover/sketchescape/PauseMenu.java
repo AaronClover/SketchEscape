@@ -13,14 +13,13 @@ public class PauseMenu extends MyScreen {
 	TextureRegion frame;
 
 	public PauseMenu(MyGdxGame g) {
-		// super(g);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
 		game = g;
 		pauseImage = new Texture(Gdx.files.internal("data/pause menu.png"));
 		pReleased = false;
-		
+
 	}
 
 	@Override
@@ -28,14 +27,11 @@ public class PauseMenu extends MyScreen {
 		camera.update();
 
 		spriteBatch.setProjectionMatrix(camera.combined);
-		// spriteBatch.begin();
-		// 
-		// spriteBatch.end();
 		spriteBatch.begin();
 		spriteBatch.draw(frame, 0, 0, RESW, RESH);
 		spriteBatch.draw(pauseImage, 0, 0);
 		spriteBatch.end();
-		
+
 		if (Gdx.input.isKeyPressed(Keys.P)) {
 			if (pReleased == true) {
 				pReleased = false;
@@ -43,8 +39,10 @@ public class PauseMenu extends MyScreen {
 			}
 		} else {
 			if (Gdx.input.isTouched()) {
-				int touchedX = Gdx.input.getX()*RESW/Gdx.graphics.getWidth();
-				int touchedY = Gdx.input.getY()*RESH/Gdx.graphics.getHeight();
+				int touchedX = Gdx.input.getX() * RESW
+						/ Gdx.graphics.getWidth();
+				int touchedY = Gdx.input.getY() * RESH
+						/ Gdx.graphics.getHeight();
 				if ((touchedX >= 0 && touchedX <= 50)
 						&& (touchedY >= 0 && touchedY <= 50)) {
 					if (pReleased == true) {
@@ -55,7 +53,6 @@ public class PauseMenu extends MyScreen {
 			} else {
 				pReleased = true;
 			}
-
 		}
 	}
 
@@ -63,12 +60,11 @@ public class PauseMenu extends MyScreen {
 		frame = f;
 	}
 
-	 @Override
-	   public boolean keyDown(int keycode) {
-	        if(keycode == Keys.BACK){
-	        	game.setScreen(game.getGameScreen());
-	        }
-	        return false;
-	   }
-
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.BACK) {
+			game.setScreen(game.getGameScreen());
+		}
+		return false;
+	}
 }

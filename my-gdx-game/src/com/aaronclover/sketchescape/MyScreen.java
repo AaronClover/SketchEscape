@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
-public class MyScreen implements Screen, InputProcessor{
+public class MyScreen implements Screen, InputProcessor {
 	protected MyGdxGame game;
 	protected SpriteBatch spriteBatch;
 	/*
@@ -38,8 +38,6 @@ public class MyScreen implements Screen, InputProcessor{
 	/*
 	 * End Assets
 	 */
-
-	
 
 	// Fonts
 	protected BitmapFont font;
@@ -85,7 +83,7 @@ public class MyScreen implements Screen, InputProcessor{
 	protected final float FLOOR_HEIGHT = 30;
 	protected float floorPosX[];
 	// Position of background
-	protected float backgroundPosX[];	
+	protected float backgroundPosX[];
 
 	/*
 	 * The asset manager requires you to type more code, but allows you to
@@ -94,54 +92,53 @@ public class MyScreen implements Screen, InputProcessor{
 	 */
 	protected AssetManager manager = new AssetManager();
 
-	/*MyScreen(MyGdxGame g) {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, RESW, RESH);
-		spriteBatch = new SpriteBatch();
-		game = g;
-	}*/
-	
+	/*
+	 * MyScreen(MyGdxGame g) { camera = new OrthographicCamera();
+	 * camera.setToOrtho(false, RESW, RESH); spriteBatch = new SpriteBatch();
+	 * game = g; }
+	 */
+
 	@Override
 	public void render(float delta) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(this);
-        Gdx.input.setCatchBackKey(true);
-		
+		Gdx.input.setCatchBackKey(true);
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -191,5 +188,4 @@ public class MyScreen implements Screen, InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

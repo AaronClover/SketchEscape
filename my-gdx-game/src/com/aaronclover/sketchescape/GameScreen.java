@@ -6,6 +6,7 @@ import com.aaronclover.sketchescape.Runner.State;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,7 +21,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class GameScreen extends MyScreen {
 
 	private static final int FINGERS_SUPPORTED = 3;
-	// public GameScreen() {
 	protected static float runSpeed;
 	private Texture pauseButton;
 	private float pauseButtonHeight;
@@ -36,7 +36,6 @@ public class GameScreen extends MyScreen {
 	private long waitCounter;
 
 	public GameScreen(MyGdxGame g) {
-		// super(g);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
@@ -47,26 +46,17 @@ public class GameScreen extends MyScreen {
 	public void create() {
 		gameState = GameState.running;
 		runSpeed = 10;
-		// Gdx.audio.newSound(Gdx.files.internal("data/waterdrop.wav"));
-		// Gdx.audio.newMusic(Gdx.files.internal("data/music/01-TRACK 2.wav"));
-		// music2 = Gdx.audio.newMusic(Gdx.files.internal("data/music/2.mp3"));
-		// manager.load("data/music/1.mp3", Music.);
-		// manager.load("data/music/2.mp3", Music.class);
+
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/whitepaper.png", Texture.class);
 		manager.load("data/pause.png", Texture.class);
 		manager.update();
 		manager.finishLoading();
-		// music1 = manager.get("data/music/1.mp3", Music.class);
-		// music2 = manager.get("data/music/2.mp3", Music.class);
+
 		floor = manager.get("data/floor.png", Texture.class);
 		background = manager.get("data/whitepaper.png", Texture.class);
 		pauseButton = manager.get("data/pause.png", Texture.class);
-		// music2.setLooping(true);
-
-		// sicmusic1.setLooping(true);
-		// rainMusic.play();
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
@@ -80,9 +70,8 @@ public class GameScreen extends MyScreen {
 		score = 0;
 		timer = 0;
 
-		// font = new
-		// BitmapFont(Gdx.files.internal("Calibri.fnt"),Gdx.files.internal("Calibri.png"),false);
 		font = new BitmapFont();
+		font.setColor(Color.BLUE);
 
 		floorPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
@@ -92,13 +81,10 @@ public class GameScreen extends MyScreen {
 
 		pauseButtonHeight = RESH - 50;
 
-		// played = false;
-
 		// Initialize PauseFrame
 		pauseFrame = new FrameBuffer(Pixmap.Format.RGB888, RESW, RESH, false);
 		pauseFrameRegion = new TextureRegion(pauseFrame.getColorBufferTexture());
 		pauseFrameRegion.flip(false, true);
-
 	}
 
 	@Override
@@ -110,8 +96,8 @@ public class GameScreen extends MyScreen {
 			break;
 		case paused:
 			gameState = GameState.running;
-			if (pauseFrame == null) { // Handles taking the screen shot for
-										// the pause menu
+			if (pauseFrame == null) { 
+				// Handles taking the screen shot for the pause menu									
 				pauseFrame = new FrameBuffer(Pixmap.Format.RGB565, RESW, RESH,
 						false);
 				pauseFrameRegion = new TextureRegion(
@@ -137,11 +123,6 @@ public class GameScreen extends MyScreen {
 				deadRender(delta);
 			} else {
 				game.setScreen(game.getMainMenu());
-				/*if (Gdx.input.isKeyPressed(Keys.ANY_KEY)
-						|| Gdx.input.isTouched()) {
-					create();
-					System.gc(); // Garbage collector
-				}*/
 			}
 			break;
 
@@ -188,15 +169,6 @@ public class GameScreen extends MyScreen {
 		backgroundPosX[0] += 0.5f;
 		backgroundPosX[1] += 0.5f;
 
-		// Moves pause button so that it stays on the screen.
-		// gameControlPosX[0] += 0.5f;
-		// gameControlPosX[1] += 0.5f;
-
-		// if (timer >= (float)15/2 && played == false) {
-		// music2.play();
-		// played = true;
-		// }
-
 		// Updates
 		runner.update();
 
@@ -220,12 +192,7 @@ public class GameScreen extends MyScreen {
 		if (backgroundPosX[1] < camera.position.x - RESW * 1.5) {
 			backgroundPosX[1] = camera.position.x + RESW / 2;
 		}
-		/*
-		 * if (gameControlPosX[0] < camera.position.x - RESW * 1.5) {
-		 * gameControlPosX[0] = camera.position.x + RESW / 2; } if
-		 * (gameControlPosX[1] < camera.position.x - RESW * 1.5) {
-		 * gameControlPosX[1] = camera.position.x + RESW / 2; }
-		 */
+
 		// Rendering
 
 		batch.setProjectionMatrix(camera.combined);
@@ -257,12 +224,6 @@ public class GameScreen extends MyScreen {
 			spawnPositionY = FLOOR_HEIGHT;
 		}
 
-		// if (TimeUtils.nanoTime() - lastSpawnTime > 400000000) {
-		// lastSpawnPos = MathUtils.random(lastSpawnPos
-		// + Obstacle.SPRITE_WIDTH * 3, lastSpawnPos + RESW);
-		// obstacles.add(new Obstacle(camera, lastSpawnPos, spawnPositionY));
-		// lastSpawnTime = TimeUtils.nanoTime();
-		// }
 		if (obstacles.size() < 10) {
 			obstacles.add(new Obstacle(camera, lastSpawnPos + 256,
 					spawnPositionY));
@@ -297,7 +258,7 @@ public class GameScreen extends MyScreen {
 			} else {
 				runner.duckRelease();
 			}
-			//Controls pausing
+			// Controls pausing
 			if (Gdx.input.isKeyPressed(Keys.P)) {
 				if (pReleased == true) {
 					pReleased = false;
@@ -351,7 +312,6 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void endGame() {
-		// create();
 		runner.state = State.dead;
 		gameState = GameState.dead;
 		waitCounter = TimeUtils.nanoTime();
@@ -373,8 +333,6 @@ public class GameScreen extends MyScreen {
 		System.out.println("You Paused");
 		gameState = GameState.paused;
 		getScreenShot = true;
-
-		// this.game.setScreen(game.getPauseMenu());
 	}
 
 	@Override
@@ -384,5 +342,4 @@ public class GameScreen extends MyScreen {
 		}
 		return false;
 	}
-
 }

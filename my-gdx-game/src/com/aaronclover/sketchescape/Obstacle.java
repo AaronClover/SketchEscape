@@ -11,20 +11,20 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Obstacle {
-	//Assets
+	// Assets
 	private Texture image;
-	//End Assets
-	
+	// End Assets
+
 	protected Rectangle hitbox;
 	private float RESW;
 	private float RESH;
 	final static int SPRITE_WIDTH = 48;
 	final int SPRITE_HEIGHT = 48;
-	final static int SCALE = 5; //Reduces hitbox size, scaling from center
+	final static int SCALE = 5; // Reduces hitbox size, scaling from center
 	private OrthographicCamera camera;
 	protected float height;
 	protected boolean released;
-	//Debug 
+	// Debug
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	Obstacle(OrthographicCamera pcamera, float x, float y) {
@@ -37,14 +37,15 @@ public class Obstacle {
 
 	public void create(float x, float y) {
 		image = new Texture(Gdx.files.internal("data/obstacle.png"));
-		hitbox = new Rectangle(x, y, SPRITE_WIDTH-SCALE,
-				SPRITE_HEIGHT-SCALE);
+		hitbox = new Rectangle(x, y, SPRITE_WIDTH - SCALE, SPRITE_HEIGHT
+				- SCALE);
 	}
 
 	public void draw(SpriteBatch batch) {
 
-		batch.draw(image, hitbox.x-SCALE/2, hitbox.y-SCALE/2);
+		batch.draw(image, hitbox.x - SCALE / 2, hitbox.y - SCALE / 2);
 	}
+
 	public void drawHitbox() {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeType.Rectangle);
@@ -60,16 +61,12 @@ public class Obstacle {
 	public boolean isOffScreen() {
 		if (hitbox.x < camera.position.x - RESW) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	public float getTop() {
 		return height + SPRITE_HEIGHT;
 	}
-
-
-
 }
