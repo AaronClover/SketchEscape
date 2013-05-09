@@ -23,7 +23,7 @@ public class MyScreen implements Screen, InputProcessor{
 	 * 
 	 * All assets are stored in the Android project folder under assets
 	 */
-	SplashScreen splash;
+	MainMenu splash;
 	// Textures
 	protected Texture floor;
 	protected Texture background;

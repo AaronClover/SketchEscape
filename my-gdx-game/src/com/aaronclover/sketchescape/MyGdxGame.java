@@ -5,17 +5,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class MyGdxGame extends Game {
-	private GameScreen game;
-	private SplashScreen splash;
+	protected GameScreen game;
+	private MainMenu mainMenu;
 	private PauseMenu pauseMenu;
 	
 
 	@Override
 	public void create() {
-		splash = new SplashScreen(this);
+		mainMenu = new MainMenu(this);
 		game = new GameScreen(this);
 		pauseMenu = new PauseMenu(this);
-		setScreen(splash);
+		setScreen(mainMenu);
 		
 	}
 	
@@ -24,12 +24,17 @@ public class MyGdxGame extends Game {
 	} 
 	
 	public Screen getSplashScreen() {
-		return splash;
+		return mainMenu;
 	}
 
 	public Screen getPauseMenu(TextureRegion frame) {
 		pauseMenu.setFrame(frame);
 		return pauseMenu;
+	}
+
+	public Screen getMainMenu() {
+		// TODO Auto-generated method stub
+		return mainMenu;
 	}
 	
 }

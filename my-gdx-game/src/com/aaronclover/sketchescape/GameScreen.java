@@ -136,11 +136,12 @@ public class GameScreen extends MyScreen {
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
 				deadRender(delta);
 			} else {
-				if (Gdx.input.isKeyPressed(Keys.ANY_KEY)
+				game.setScreen(game.getMainMenu());
+				/*if (Gdx.input.isKeyPressed(Keys.ANY_KEY)
 						|| Gdx.input.isTouched()) {
 					create();
 					System.gc(); // Garbage collector
-				}
+				}*/
 			}
 			break;
 
