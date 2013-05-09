@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public class GameScreen extends MyScreen {
@@ -26,6 +27,7 @@ public class GameScreen extends MyScreen {
 	private float pauseButtonHeight;
 	private FrameBuffer pauseFrame;
 	private TextureRegion pauseFrameRegion;
+	private ScreenUtils screenUtils = new ScreenUtils();
 
 	protected enum GameState {
 		running, paused, dead
@@ -96,7 +98,7 @@ public class GameScreen extends MyScreen {
 			break;
 		case paused:
 			gameState = GameState.running;
-			if (pauseFrame == null) { 
+			/*if (pauseFrame == null) { 
 				// Handles taking the screen shot for the pause menu									
 				pauseFrame = new FrameBuffer(Pixmap.Format.RGB565, RESW, RESH,
 						false);
@@ -114,15 +116,15 @@ public class GameScreen extends MyScreen {
 
 			if (pauseFrame != null) {
 				pauseFrame.end();
-
-				game.setScreen(game.getPauseMenu(pauseFrameRegion));
-			}
+*/
+				game.setScreen(game.getPauseMenu(ScreenUtils.getFrameBufferTexture()));//pauseFrameRegion));
+			//}
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
 				deadRender(delta);
 			} else {
-				game.setScreen(game.getMainMenu());
+				game.setScreen(game.getGameOverMenu(ScreenUtils.getFrameBufferTexture()));
 			}
 			break;
 
@@ -131,13 +133,18 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void deadRender(float delta) {
+		
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 
 		camera.update();
 
 		runner.update();
 		batch.setProjectionMatrix(camera.combined);
+		
+		
+		
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
 		batch.draw(background, backgroundPosX[1], 0);
@@ -146,7 +153,7 @@ public class GameScreen extends MyScreen {
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
 		// Displays score
-		font.draw(batch, String.valueOf(camera.position.x), camera.position.x
+		font.draw(batch, String.valueOf((int) (camera.position.x - RESW / 2) / 100), camera.position.x
 				+ RESW / 2 - 100, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -157,7 +164,6 @@ public class GameScreen extends MyScreen {
 	}
 
 	public void runningRender(float delta) {
-
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
@@ -215,6 +221,7 @@ public class GameScreen extends MyScreen {
 		}
 
 		batch.end();
+		//End of drawing
 
 		// generate random selection for obstacle to be on floor or mid height.
 		spawnPositionRandom = MathUtils.random(1, 2);

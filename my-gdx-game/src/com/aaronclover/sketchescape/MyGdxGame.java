@@ -8,12 +8,14 @@ public class MyGdxGame extends Game {
 	protected GameScreen game;
 	private MainMenu mainMenu;
 	private PauseMenu pauseMenu;
+	private GameOverMenu gameOverMenu;
 
 	@Override
 	public void create() {
 		mainMenu = new MainMenu(this);
 		game = new GameScreen(this);
 		pauseMenu = new PauseMenu(this);
+		gameOverMenu = new GameOverMenu(this);
 		setScreen(mainMenu);
 	}
 
@@ -31,7 +33,11 @@ public class MyGdxGame extends Game {
 	}
 
 	public Screen getMainMenu() {
-		// TODO Auto-generated method stub
 		return mainMenu;
+	}
+	
+	public Screen getGameOverMenu(TextureRegion frame) {
+		gameOverMenu.setFrame(frame);
+		return gameOverMenu;
 	}
 }
