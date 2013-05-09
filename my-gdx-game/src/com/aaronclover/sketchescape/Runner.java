@@ -109,13 +109,6 @@ public class Runner {
 
 	}
 
-	public void drawHitbox() {
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.begin(ShapeType.Rectangle);
-		shapeRenderer.setColor(Color.BLACK);
-		shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-		shapeRenderer.end();
-	}
 
 	public void dispose() {
 		currentSprite.dispose();

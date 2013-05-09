@@ -46,14 +46,6 @@ public class Obstacle {
 		batch.draw(image, hitbox.x - SCALE / 2, hitbox.y - SCALE / 2);
 	}
 
-	public void drawHitbox() {
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.begin(ShapeType.Rectangle);
-		shapeRenderer.setColor(Color.BLACK);
-		shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-		shapeRenderer.end();
-	}
-
 	public void dispose() {
 		image.dispose();
 	}
