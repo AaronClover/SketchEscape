@@ -8,7 +8,6 @@ public class MyGdxGame extends Game {
 	protected GameScreen game;
 	private MainMenu mainMenu;
 	private PauseMenu pauseMenu;
-	
 
 	@Override
 	public void create() {
@@ -16,13 +15,12 @@ public class MyGdxGame extends Game {
 		game = new GameScreen(this);
 		pauseMenu = new PauseMenu(this);
 		setScreen(mainMenu);
-		
 	}
-	
+
 	public Screen getGameScreen() {
 		return game;
-	} 
-	
+	}
+
 	public Screen getSplashScreen() {
 		return mainMenu;
 	}
@@ -36,5 +34,4 @@ public class MyGdxGame extends Game {
 		// TODO Auto-generated method stub
 		return mainMenu;
 	}
-	
 }
