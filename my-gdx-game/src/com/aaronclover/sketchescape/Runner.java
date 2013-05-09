@@ -17,7 +17,7 @@ public class Runner {
 	private Texture jumpingSprite[];
 	private Texture duckingSprite[];
 	private Texture deadSprite[];
-	private int animationIndex;
+	protected int animationIndex;
 	private float lastFrameTime;
 	protected Rectangle hitbox;
 	private float RESW;

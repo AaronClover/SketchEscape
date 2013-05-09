@@ -98,33 +98,30 @@ public class GameScreen extends MyScreen {
 			break;
 		case paused:
 			gameState = GameState.running;
-			/*if (pauseFrame == null) { 
-				// Handles taking the screen shot for the pause menu									
-				pauseFrame = new FrameBuffer(Pixmap.Format.RGB565, RESW, RESH,
-						false);
-				pauseFrameRegion = new TextureRegion(
-						pauseFrame.getColorBufferTexture());
-				pauseFrameRegion.flip(false, true);
-
-			}
-			pauseFrame.begin();
-
-			if (getScreenShot == true) {
-				runningRender(delta);
-				getScreenShot = false;
-			}
-
-			if (pauseFrame != null) {
-				pauseFrame.end();
-*/
-				game.setScreen(game.getPauseMenu(ScreenUtils.getFrameBufferTexture()));//pauseFrameRegion));
-			//}
+			/*
+			 * if (pauseFrame == null) { // Handles taking the screen shot for
+			 * the pause menu pauseFrame = new FrameBuffer(Pixmap.Format.RGB565,
+			 * RESW, RESH, false); pauseFrameRegion = new TextureRegion(
+			 * pauseFrame.getColorBufferTexture()); pauseFrameRegion.flip(false,
+			 * true);
+			 * 
+			 * } pauseFrame.begin();
+			 * 
+			 * if (getScreenShot == true) { runningRender(delta); getScreenShot
+			 * = false; }
+			 * 
+			 * if (pauseFrame != null) { pauseFrame.end();
+			 */
+			game.setScreen(game.getPauseMenu(ScreenUtils.getFrameBufferTexture(
+					0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))); // Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));// pauseFrameRegion));
+			// }
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
 				deadRender(delta);
 			} else {
-				game.setScreen(game.getGameOverMenu(ScreenUtils.getFrameBufferTexture()));
+				game.setScreen(game.getGameOverMenu(ScreenUtils
+						.getFrameBufferTexture()));
 			}
 			break;
 
@@ -133,18 +130,15 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void deadRender(float delta) {
-		
+
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
 
 		camera.update();
 
 		runner.update();
 		batch.setProjectionMatrix(camera.combined);
-		
-		
-		
+
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
 		batch.draw(background, backgroundPosX[1], 0);
@@ -153,8 +147,9 @@ public class GameScreen extends MyScreen {
 		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
 		// Displays score
-		font.draw(batch, String.valueOf((int) (camera.position.x - RESW / 2) / 100), camera.position.x
-				+ RESW / 2 - 100, RESH - 50);
+		font.draw(batch,
+				String.valueOf((int) (camera.position.x - RESW / 2) / 100),
+				camera.position.x + RESW / 2 - 100, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
@@ -215,13 +210,17 @@ public class GameScreen extends MyScreen {
 				String.valueOf((int) (camera.position.x - RESW / 2) / 100),
 				camera.position.x + RESW / 2 - 100, RESH - 50);
 
+		font.draw(batch,
+				("Width: " + String.valueOf(Gdx.graphics.getWidth()) + "Height: " + String.valueOf(Gdx.graphics.getHeight())),
+				camera.position.x - RESW / 2 + 100, RESH - 50);
+
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
 		}
 
 		batch.end();
-		//End of drawing
+		// End of drawing
 
 		// generate random selection for obstacle to be on floor or mid height.
 		spawnPositionRandom = MathUtils.random(1, 2);
@@ -320,6 +319,7 @@ public class GameScreen extends MyScreen {
 
 	private void endGame() {
 		runner.state = State.dead;
+		runner.animationIndex = 0;
 		gameState = GameState.dead;
 		waitCounter = TimeUtils.nanoTime();
 	}
