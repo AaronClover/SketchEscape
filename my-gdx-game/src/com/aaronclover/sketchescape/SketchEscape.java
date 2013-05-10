@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class MyGdxGame extends Game {
+public class SketchEscape extends Game {
 	protected GameScreen game;
 	private MainMenu mainMenu;
 	private PauseMenu pauseMenu;

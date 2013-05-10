@@ -1,6 +1,6 @@
 package com.me.mygdxgame;
 
-import com.aaronclover.sketchescape.MyGdxGame;
+import com.aaronclover.sketchescape.SketchEscape;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -12,6 +12,6 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 480;
 		
-		new LwjglApplication(new MyGdxGame(), cfg);
+		new LwjglApplication(new SketchEscape(), cfg);
 	}
 }

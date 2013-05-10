@@ -37,7 +37,7 @@ public class GameScreen extends MyScreen {
 	private boolean getScreenShot;
 	private long waitCounter;
 
-	public GameScreen(MyGdxGame g) {
+	public GameScreen(SketchEscape g) {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
@@ -209,10 +209,6 @@ public class GameScreen extends MyScreen {
 		font.draw(batch,
 				String.valueOf((int) (camera.position.x - RESW / 2) / 100),
 				camera.position.x + RESW / 2 - 100, RESH - 50);
-
-		font.draw(batch,
-				("Width: " + String.valueOf(Gdx.graphics.getWidth()) + "Height: " + String.valueOf(Gdx.graphics.getHeight())),
-				camera.position.x - RESW / 2 + 100, RESH - 50);
 
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {

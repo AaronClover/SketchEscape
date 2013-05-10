@@ -3,7 +3,7 @@ package com.aaronclover.sketchescape;
 import android.os.Bundle;
 
 
-import com.aaronclover.sketchescape.MyGdxGame;
+import com.aaronclover.sketchescape.SketchEscape;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
@@ -23,7 +23,7 @@ public class MainActivity extends AndroidApplication {
         cfg.useAccelerometer = false;
         cfg.useCompass = false;
         
-        initialize(new MyGdxGame(), cfg);
+        initialize(new SketchEscape(), cfg);
         
     }
 }

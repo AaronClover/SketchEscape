@@ -12,7 +12,7 @@ public class PauseMenu extends MyScreen {
 	private Texture pauseImage;
 	TextureRegion frame;
 
-	public PauseMenu(MyGdxGame g) {
+	public PauseMenu(SketchEscape g) {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();

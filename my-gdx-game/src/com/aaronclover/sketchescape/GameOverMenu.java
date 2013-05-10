@@ -17,7 +17,7 @@ public class GameOverMenu extends MyScreen {
 	final int PLAY_BUTTON_HEIGHT = 100;
 	private Rectangle playBox;
 
-	public GameOverMenu(MyGdxGame g) {
+	public GameOverMenu(SketchEscape g) {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();

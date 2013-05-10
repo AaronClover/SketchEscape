@@ -10,13 +10,13 @@ import com.badlogic.gdx.math.Rectangle;
 public class MainMenu extends MyScreen {
 	private SpriteBatch spriteBatch;
 	private Texture splash;
-	private MyGdxGame game;
+	private SketchEscape game;
 	private Texture playButton;
 	final int PLAY_BUTTON_WIDTH = 200;
 	final int PLAY_BUTTON_HEIGHT = 100;
 	private Rectangle playBox;
 
-	public MainMenu(MyGdxGame g) {
+	public MainMenu(SketchEscape g) {
 		game = g;
 		spriteBatch = new SpriteBatch();
 		camera = new OrthographicCamera();
