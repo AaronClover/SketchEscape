@@ -2,17 +2,19 @@ package com.aaronclover.sketchescape;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.aaronclover.sketchescape.GameScreen.GameState;
 
 public class GameOverMenu extends MyScreen {
-	private Texture pauseImage;
 	TextureRegion frame;
 	private Texture playButton;
+	private Texture paper;
 	final int PLAY_BUTTON_WIDTH = 200;
 	final int PLAY_BUTTON_HEIGHT = 100;
 	private Rectangle playBox;
@@ -22,32 +24,37 @@ public class GameOverMenu extends MyScreen {
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
 		game = g;
-		pauseImage = new Texture(Gdx.files.internal("data/pause menu.png"));
-		
-		playButton = new Texture(Gdx.files.internal("data/play.png"));
+		paper = new Texture(Gdx.files.internal("data/whitepaper.png"));
+		playButton = new Texture(Gdx.files.internal("data/new game.png"));
 		playBox = new Rectangle(camera.position.x - PLAY_BUTTON_WIDTH / 2,
 				camera.position.y - PLAY_BUTTON_HEIGHT / 2, PLAY_BUTTON_WIDTH,
 				PLAY_BUTTON_HEIGHT);
-
+		
 	}
 
 	@Override
 	public void render(float delta) {
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		camera.update();
 
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
-		spriteBatch.draw(frame, 0, 0, RESW, RESH);
-		spriteBatch.draw(pauseImage, 0, 0);
+		spriteBatch.draw(paper, 0, 0);
 		spriteBatch.draw(playButton, playBox.x, playBox.y);
+		font.draw(spriteBatch,
+				String.valueOf(score),
+				camera.position.x + RESW / 2 - 100, RESH - 50);
 		spriteBatch.end();
+		
 
 		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
 			game.setScreen(game.getGameScreen());
 		}
 		if (Gdx.input.isTouched()) {
-			int touchX = Gdx.input.getX() * RESW / Gdx.graphics.getWidth();
-			int touchY = Gdx.input.getY() * RESH / Gdx.graphics.getHeight();
+			int touchX = getTouchX();
+			int touchY = getTouchY();
 			if (touchX >= playBox.x) {
 				if (touchX <= playBox.x + playBox.width) {
 					if (touchY >= playBox.y) {
@@ -60,9 +67,6 @@ public class GameOverMenu extends MyScreen {
 		}
 		}
 
-	public void setFrame(TextureRegion f) {
-		frame = f;
-	}
 
 	@Override
 	public boolean keyDown(int keycode) {

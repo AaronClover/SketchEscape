@@ -2,7 +2,6 @@ package com.aaronclover.sketchescape;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class SketchEscape extends Game {
 	protected GameScreen game;
@@ -27,8 +26,7 @@ public class SketchEscape extends Game {
 		return mainMenu;
 	}
 
-	public Screen getPauseMenu(TextureRegion frame) {
-		pauseMenu.setFrame(frame);
+	public Screen getPauseMenu() {
 		return pauseMenu;
 	}
 
@@ -36,8 +34,7 @@ public class SketchEscape extends Game {
 		return mainMenu;
 	}
 	
-	public Screen getGameOverMenu(TextureRegion frame) {
-		gameOverMenu.setFrame(frame);
+	public Screen getGameOverMenu() {
 		return gameOverMenu;
 	}
 }

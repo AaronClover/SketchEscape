@@ -1,5 +1,10 @@
 package com.aaronclover.sketchescape;
-
+//Fixed touch controls
+//Changed pause and game over screens to not show most recent frame due to library bug with non tegra android devices
+//New button images
+//Changed score display
+//Added score to game over screen
+//Changed paper image
 import java.util.ArrayList;
 
 import com.aaronclover.sketchescape.Runner.State;
@@ -73,7 +78,8 @@ public class GameScreen extends MyScreen {
 		timer = 0;
 
 		font = new BitmapFont();
-		font.setColor(Color.BLUE);
+		font.setColor(Color.BLACK);
+		font.setScale(2);
 
 		floorPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
@@ -81,7 +87,7 @@ public class GameScreen extends MyScreen {
 		backgroundPosX = new float[] { camera.position.x - RESW / 2,
 				camera.position.x + RESW / 2 };
 
-		pauseButtonHeight = RESH - 50;
+		pauseButtonHeight = RESH - 60;
 
 		// Initialize PauseFrame
 		pauseFrame = new FrameBuffer(Pixmap.Format.RGB888, RESW, RESH, false);
@@ -97,31 +103,16 @@ public class GameScreen extends MyScreen {
 			runningRender(delta);
 			break;
 		case paused:
+			
 			gameState = GameState.running;
-			/*
-			 * if (pauseFrame == null) { // Handles taking the screen shot for
-			 * the pause menu pauseFrame = new FrameBuffer(Pixmap.Format.RGB565,
-			 * RESW, RESH, false); pauseFrameRegion = new TextureRegion(
-			 * pauseFrame.getColorBufferTexture()); pauseFrameRegion.flip(false,
-			 * true);
-			 * 
-			 * } pauseFrame.begin();
-			 * 
-			 * if (getScreenShot == true) { runningRender(delta); getScreenShot
-			 * = false; }
-			 * 
-			 * if (pauseFrame != null) { pauseFrame.end();
-			 */
-			game.setScreen(game.getPauseMenu(ScreenUtils.getFrameBufferTexture(
-					0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()))); // Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));// pauseFrameRegion));
-			// }
+			game.setScreen(game.getPauseMenu());
+			
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
 				deadRender(delta);
 			} else {
-				game.setScreen(game.getGameOverMenu(ScreenUtils
-						.getFrameBufferTexture()));
+				game.setScreen(game.getGameOverMenu());
 			}
 			break;
 
@@ -144,11 +135,12 @@ public class GameScreen extends MyScreen {
 		batch.draw(background, backgroundPosX[1], 0);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
-		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
 		runner.draw(batch);
+		//Updates score
+		score = ((int) (camera.position.x - RESW / 2) / 100);
 		// Displays score
 		font.draw(batch,
-				String.valueOf((int) (camera.position.x - RESW / 2) / 100),
+				String.valueOf(score),
 				camera.position.x + RESW / 2 - 100, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -165,10 +157,6 @@ public class GameScreen extends MyScreen {
 		// Moves player
 		camera.position.add(runSpeed, 0, 0);
 		camera.update();
-
-		// Moves background to appear to be moving slower
-		backgroundPosX[0] += 0.5f;
-		backgroundPosX[1] += 0.5f;
 
 		// Updates
 		runner.update();
@@ -202,7 +190,7 @@ public class GameScreen extends MyScreen {
 		batch.draw(background, backgroundPosX[1], 0);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
-		batch.draw(pauseButton, camera.position.x - RESW / 2, pauseButtonHeight);
+		batch.draw(pauseButton, camera.position.x - RESW / 2 + 10, pauseButtonHeight);
 		runner.draw(batch);
 
 		// Draws Score
@@ -289,13 +277,18 @@ public class GameScreen extends MyScreen {
 	}
 
 	private void touchInput() {
+		boolean rightTouched = false;
+		boolean pauseTouched = false;
 		for (int i = 0; i < FINGERS_SUPPORTED; i++) {
 			if (Gdx.input.isTouched(i)) {
-				int touchedX = Gdx.input.getX(i);
-				int touchedY = Gdx.input.getY(i);
-				if ((touchedX >= 0 && touchedX <= 50)
-						&& (touchedY >= 0 && touchedY <= 50)) {
-					pause();
+				int touchedX = getTouchX(i);
+				int touchedY = getTouchY(i);
+				if ((touchedX >= 0 && touchedX <= 60)
+						&& (touchedY >= 0 && touchedY <= 60)) {
+					if (pReleased == true) {
+						pauseTouched = true;
+						pause();
+					}
 				}
 				// If user touches left side of the screen then Runner Ducks
 				if (touchedX < 400) {
@@ -304,13 +297,18 @@ public class GameScreen extends MyScreen {
 				// user touches right side of the screen then Jump.
 				if (touchedX >= 400) {
 					runner.jump();
+					rightTouched = true;
 				}
-			} else {
-				runner.jumpRelease();
-				runner.duckRelease();
-			}
+			} 
 		}
-
+		if (rightTouched == false) {
+			runner.jumpRelease();
+		}
+		if (pauseTouched == false) {
+			pReleased = true;
+		} else {
+			pReleased = false;
+		}
 	}
 
 	private void endGame() {

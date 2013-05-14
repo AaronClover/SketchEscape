@@ -28,6 +28,7 @@ public class MyScreen implements Screen, InputProcessor {
 	protected Texture floor;
 	protected Texture background;
 	protected boolean pReleased;
+	protected boolean rightSideReleased;
 
 	// Music
 	protected Music music1;
@@ -40,7 +41,7 @@ public class MyScreen implements Screen, InputProcessor {
 	 */
 
 	// Fonts
-	protected BitmapFont font;
+	static protected BitmapFont font;
 
 	// This will determine what we see on the screen and also pans the view
 	protected OrthographicCamera camera;
@@ -50,7 +51,6 @@ public class MyScreen implements Screen, InputProcessor {
 
 	// Used to determine where mouse/finger is pressed
 	protected Vector3 touchPos = new Vector3();
-
 	/*
 	 * In game objects
 	 */
@@ -70,17 +70,20 @@ public class MyScreen implements Screen, InputProcessor {
 	protected float timer;
 
 	// Current game score
-	protected int score;
+	static protected int score;
 
 	// Resolution Width
 	public final int RESW = 800;
 	// Resolution Height
 	public final int RESH = 480;
+	
+	private final int TOUCH_SCALEX = RESW / Gdx.graphics.getWidth();
+	private final int TOUCH_SCALEY = RESH / Gdx.graphics.getHeight();
 
 	// protected boolean played;
 
 	// Position of the floor
-	protected final float FLOOR_HEIGHT = 30;
+	protected final float FLOOR_HEIGHT = 60;
 	protected float floorPosX[];
 	// Position of background
 	protected float backgroundPosX[];
@@ -97,6 +100,22 @@ public class MyScreen implements Screen, InputProcessor {
 	 * camera.setToOrtho(false, RESW, RESH); spriteBatch = new SpriteBatch();
 	 * game = g; }
 	 */
+	
+	public int getTouchX() {
+		return Gdx.input.getX() * RESW / Gdx.graphics.getWidth();
+	}
+	
+	public int getTouchY() {
+		return Gdx.input.getY() * RESH / Gdx.graphics.getHeight();
+	}
+	
+	public int getTouchX(int i) {
+		return Gdx.input.getX(i) * RESW / Gdx.graphics.getWidth();
+	}
+	
+	public int getTouchY(int i) {
+		return Gdx.input.getY(i) * RESH / Gdx.graphics.getHeight();
+	}
 
 	@Override
 	public void render(float delta) {
