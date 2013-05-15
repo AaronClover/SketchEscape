@@ -2,6 +2,7 @@ package com.aaronclover.sketchescape;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.sun.xml.internal.bind.CycleRecoverable.Context;
 
 public class GameOverMenu extends MyScreen {
 	TextureRegion frame;
@@ -94,29 +96,30 @@ public class GameOverMenu extends MyScreen {
 		if (endingScore > lastHighScore)
 		{
 			lastHighScore = endingScore;
-			setHighScore();
+			setHighScore(endingScore);
 		}
 	}
 	
 	private int getHighScore() {
 		int lastHighScore;
 		try {
-			FileInputStream fis = new FileInputStream (Gdx.files.internal("cache").toString());
+			FileInputStream fis = new FileInputStream (Gdx.files.getLocalStoragePath() + "/cache.c");
 			DataInputStream dis = new DataInputStream(fis);
 			lastHighScore = dis.readInt();
 			dis.close();
 			return lastHighScore;
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 			return 0;
 		}
 	}
 	
-	private void setHighScore() {
+	private void setHighScore(int newHighScore) {
 		try {
-			FileOutputStream fos = new FileOutputStream(Gdx.files.internal("cache").toString());
+			FileOutputStream fos = new FileOutputStream(Gdx.files.getLocalStoragePath() + "/cache.c");
 			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(endingScore);
+			dos.writeInt(newHighScore);
 			dos.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -125,6 +128,8 @@ public class GameOverMenu extends MyScreen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 		 
 	}
 
