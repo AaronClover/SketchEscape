@@ -33,6 +33,8 @@ public class GameScreen extends MyScreen {
 	private FrameBuffer pauseFrame;
 	private TextureRegion pauseFrameRegion;
 	private ScreenUtils screenUtils = new ScreenUtils();
+	private Texture floor;
+	private Texture background;
 
 	protected enum GameState {
 		running, paused, dead
@@ -43,8 +45,6 @@ public class GameScreen extends MyScreen {
 	private long waitCounter;
 
 	public GameScreen(SketchEscape g) {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
 		game = g;
 		create();
@@ -168,17 +168,17 @@ public class GameScreen extends MyScreen {
 		}
 
 		// Checks floor positioning
-		if (floorPosX[0] < camera.position.x - RESW * 1.5) {
+		if (floorPosX[0] <= camera.position.x - RESW * 1.5) {
 			floorPosX[0] = camera.position.x + RESW / 2 - 8;
 		}
-		if (floorPosX[1] < camera.position.x - RESW * 1.5) {
+		if (floorPosX[1] <= camera.position.x - RESW * 1.5) {
 			floorPosX[1] = camera.position.x + RESW / 2 - 8;
 		}
 
-		if (backgroundPosX[0] < camera.position.x - RESW * 1.5) {
+		if (backgroundPosX[0] <= camera.position.x - RESW * 1.5) {
 			backgroundPosX[0] = camera.position.x + RESW / 2;
 		}
-		if (backgroundPosX[1] < camera.position.x - RESW * 1.5) {
+		if (backgroundPosX[1] <= camera.position.x - RESW * 1.5) {
 			backgroundPosX[1] = camera.position.x + RESW / 2;
 		}
 
@@ -326,7 +326,6 @@ public class GameScreen extends MyScreen {
 			obstacles.get(i).dispose();
 		}
 		runner.dispose();
-		music1.dispose();
 		batch.dispose();
 	}
 
@@ -336,13 +335,5 @@ public class GameScreen extends MyScreen {
 		System.out.println("You Paused");
 		gameState = GameState.paused;
 		getScreenShot = true;
-	}
-
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.BACK && gameState == GameState.running) {
-			pause();
-		}
-		return false;
 	}
 }

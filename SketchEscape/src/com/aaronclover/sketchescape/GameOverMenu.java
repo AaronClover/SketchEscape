@@ -1,6 +1,14 @@
 package com.aaronclover.sketchescape;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -19,6 +27,7 @@ public class GameOverMenu extends MyScreen {
 	final int PLAY_BUTTON_HEIGHT = 100;
 	private Rectangle playBox;
 	private int endingScore;
+	private int lastHighScore;
 
 	public GameOverMenu(SketchEscape g) {
 		camera = new OrthographicCamera();
@@ -44,15 +53,24 @@ public class GameOverMenu extends MyScreen {
 		spriteBatch.begin();
 		spriteBatch.draw(paper, 0, 0);
 		spriteBatch.draw(playButton, playBox.x, playBox.y);
-		font.draw(spriteBatch, "Score: " + String.valueOf(endingScore),
-				camera.position.x -50 - String.valueOf(endingScore).length() * 10,
+		font.draw(spriteBatch, "High Score: " + lastHighScore,
+				camera.position.x - 85 - String.valueOf(lastHighScore).length() * 7,
+				140);
+		font.draw(spriteBatch, " Score: " + String.valueOf(endingScore),
+				camera.position.x -50 - String.valueOf(endingScore).length() * 7,
 				50);
+		
+		if (MuteHandler.isMuted())
+			spriteBatch.draw(muted, muteBox.x, muteBox.y);
+		else
+			spriteBatch.draw(unmuted, muteBox.x, muteBox.y);
+		
 		spriteBatch.end();
 
-		if (Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
+		if (Gdx.app.getType() == ApplicationType.Desktop && Gdx.input.isKeyPressed(Keys.ANY_KEY)) {
 			game.setScreen(game.getGameScreen());
 		}
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.justTouched()) {
 			int touchX = getTouchX();
 			int touchY = getTouchY();
 			if (touchX >= playBox.x) {
@@ -64,20 +82,52 @@ public class GameOverMenu extends MyScreen {
 					}
 				}
 			}
+			if (touchX >= muteBox.x && touchY <= muteBox.y) {
+				MuteHandler.toggle();
+			}
 		}
 	}
 
 	public void setScore(int score) {
 		endingScore = score;
+		lastHighScore = getHighScore();
+		if (endingScore > lastHighScore)
+		{
+			lastHighScore = endingScore;
+			setHighScore();
+		}
+	}
+	
+	private int getHighScore() {
+		int lastHighScore;
+		try {
+			FileInputStream fis = new FileInputStream (Gdx.files.internal("cache").toString());
+			DataInputStream dis = new DataInputStream(fis);
+			lastHighScore = dis.readInt();
+			dis.close();
+			return lastHighScore;
+		}
+		catch (IOException e) {
+			return 0;
+		}
+	}
+	
+	private void setHighScore() {
+		try {
+			FileOutputStream fos = new FileOutputStream(Gdx.files.internal("cache").toString());
+			DataOutputStream dos = new DataOutputStream(fos);
+			dos.writeInt(endingScore);
+			dos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.BACK) {
-			game.setScreen(game.getGameScreen());
-		}
-		return false;
-	}
 
 	@Override
 	public void show() {

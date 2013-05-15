@@ -5,40 +5,25 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.aaronclover.sketchescape.SketchEscape.ScreenState;
 
 public class MyScreen implements Screen, InputProcessor {
-	protected SketchEscape game;
+	protected static SketchEscape game;
 	protected SpriteBatch spriteBatch;
-	/*
-	 * Assets
-	 * 
-	 * Assets are things such as Images, music
-	 * 
-	 * All assets are stored in the Android project folder under assets
-	 */
 	MainMenu splash;
-	// Textures
-	protected Texture floor;
-	protected Texture background;
+	
 	protected boolean pReleased;
 	protected boolean rightSideReleased;
 
-	// Music
-	protected Music music1;
-	protected Music music2;
-
-	// Sound
-
-	/*
-	 * End Assets
-	 */
 
 	// Fonts
 	static protected BitmapFont font;
@@ -87,6 +72,19 @@ public class MyScreen implements Screen, InputProcessor {
 	protected float floorPosX[];
 	// Position of background
 	protected float backgroundPosX[];
+	protected Texture muted;
+	protected Texture unmuted;
+	protected Rectangle muteBox;
+	
+	
+	MyScreen() {
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, RESW, RESH);
+		//Mute Button
+		muted = new Texture(Gdx.files.internal("data/muted.png"));
+		unmuted = new Texture(Gdx.files.internal("data/unmuted.png"));
+		muteBox = new Rectangle(camera.position.x + RESW / 2 - 60, RESH - 60, 50, 50);
+	}
 
 	/*
 	 * The asset manager requires you to type more code, but allows you to
@@ -162,7 +160,29 @@ public class MyScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		if (keycode == Keys.BACK) {
+			switch (game.screenState) {
+			case mainmenu:
+				System.exit(0);
+				break;
+			
+			case gameover:
+				game.setScreen(game.getMainMenu());
+				break;
+				
+			case howto:
+				game.setScreen(game.getMainMenu());
+				break;
+			
+			case game:
+				game.setScreen(game.getPauseMenu());
+				break;
+				
+			case pause:
+				game.setScreen(game.getGameScreen());
+				break;
+			}
+		}
 		return false;
 	}
 
@@ -207,4 +227,6 @@ public class MyScreen implements Screen, InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	
 }

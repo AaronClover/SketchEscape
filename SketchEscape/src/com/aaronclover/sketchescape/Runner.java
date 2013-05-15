@@ -1,6 +1,8 @@
 package com.aaronclover.sketchescape;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.SoundLoader.SoundParameter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,13 +11,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.aaronclover.sketchescape.MuteHandler;
 
-public class Runner {
-	private static final float JUMP_HEIGHT = 5;
+public class Runner{
 	private Texture currentSprite;
 	private Texture runningSprite[];
 	private Texture jumpingSprite[];
 	private Texture duckingSprite[];
+	private Sound jump, land;
 	private Texture deadSprite[];
 	protected int animationIndex;
 	private float lastFrameTime;
@@ -33,7 +36,9 @@ public class Runner {
 	private float floorHeight;
 	private int posX = -300;
 	private float speedY;
-	private final float gravity = -1.2f;
+	private final float FLOAT_RATE = 0.7f;
+	private final float gravity = -0.7f;
+	private final float JUMP_HEIGHT = 5;
 	private float jumpSpeed;
 	private boolean jumpReleased;
 	private boolean duckReleased;
@@ -49,6 +54,7 @@ public class Runner {
 	};
 
 	State state;
+	
 
 	// Debug
 
@@ -92,6 +98,9 @@ public class Runner {
 				new Texture(Gdx.files.internal("data/runner/dead/5.png")),
 				new Texture(Gdx.files.internal("data/runner/dead/6.png")) };
 		deadSprite = deadInit;
+		
+		jump = Gdx.audio.newSound(Gdx.files.internal("data/runner/jump.wav"));
+		land = Gdx.audio.newSound(Gdx.files.internal("data/runner/land.wav"));
 
 		hitbox = new Rectangle(camera.position.x + posX, floorHeight,
 				SPRITE_WIDTH, SPRITE_HEIGHT);
@@ -127,13 +136,16 @@ public class Runner {
 		hitbox.x = camera.position.x + posX;
 
 		if (speedY > 0) {
-			jumpSpeed *= 0.80;
+			jumpSpeed *= FLOAT_RATE;
 		} else {
 			// Checks floor
 			if (hitbox.y < floorHeight) {
 				if (state != State.ducking && state != State.dead) {
 					if (state == State.jumping) {
 						hitbox.setWidth(SPRITE_WIDTH);
+						if (MuteHandler.isMuted() == false) {
+							land.play();
+						}
 					}
 					state = state.running;
 
@@ -214,6 +226,9 @@ public class Runner {
 			hitbox.setHeight(SPRITE_HEIGHT);
 			hitbox.setWidth(JUMP_WIDTH);
 			jumpReleased = false;
+			if (MuteHandler.isMuted() == false) {
+				jump.play();
+			}
 		}
 
 		speedY += jumpSpeed;

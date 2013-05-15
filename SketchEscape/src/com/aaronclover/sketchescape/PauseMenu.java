@@ -40,6 +40,12 @@ public class PauseMenu extends MyScreen {
 		spriteBatch.begin();
 		spriteBatch.draw(paper, 0, 0);
 		spriteBatch.draw(resumeButton, resumeBox.x, resumeBox.y);
+		
+		if (MuteHandler.isMuted())
+			spriteBatch.draw(muted, muteBox.x, muteBox.y);
+		else
+			spriteBatch.draw(unmuted, muteBox.x, muteBox.y);
+		
 		spriteBatch.end();
 
 		if (Gdx.input.isKeyPressed(Keys.P)) {
@@ -48,7 +54,7 @@ public class PauseMenu extends MyScreen {
 				game.setScreen(game.getGameScreen());
 			}
 		} else {
-			if (Gdx.input.isTouched()) {
+			if (Gdx.input.justTouched()) {
 				int touchX = getTouchX();
 				int touchY = getTouchY();
 				if (touchX >= resumeBox.x) {
@@ -60,15 +66,12 @@ public class PauseMenu extends MyScreen {
 						}
 					}
 				}
+				if (touchX >= muteBox.x && touchY <= muteBox.y) {
+					MuteHandler.toggle();
+				}
 			}
+			
 		}
 	}
 
-	@Override
-	public boolean keyDown(int keycode) {
-		if (keycode == Keys.BACK) {
-			game.setScreen(game.getGameScreen());
-		}
-		return false;
-	}
 }
