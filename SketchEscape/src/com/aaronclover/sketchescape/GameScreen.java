@@ -52,7 +52,7 @@ public class GameScreen extends MyScreen {
 
 	public void create() {
 		gameState = GameState.running;
-		runSpeed = 10;
+		runSpeed = 8;
 
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
