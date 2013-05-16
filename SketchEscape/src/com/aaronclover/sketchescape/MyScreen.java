@@ -69,9 +69,6 @@ public class MyScreen implements Screen, InputProcessor {
 
 	// Position of the floor
 	protected final float FLOOR_HEIGHT = 60;
-	protected float floorPosX[];
-	// Position of background
-	protected float backgroundPosX[];
 	protected Texture muted;
 	protected Texture unmuted;
 	protected Rectangle muteBox;

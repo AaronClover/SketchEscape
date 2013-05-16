@@ -1,4 +1,5 @@
 package com.aaronclover.sketchescape;
+
 //Fixed touch controls
 //Changed pause and game over screens to not show most recent frame due to library bug with non tegra android devices
 //New button images
@@ -35,6 +36,8 @@ public class GameScreen extends MyScreen {
 	private ScreenUtils screenUtils = new ScreenUtils();
 	private Texture floor;
 	private Texture background;
+	protected float floorPosX[];
+	protected float backgroundPosX[];
 
 	protected enum GameState {
 		running, paused, dead
@@ -43,6 +46,7 @@ public class GameScreen extends MyScreen {
 	GameState gameState;
 	private boolean getScreenShot;
 	private long waitCounter;
+	private float increment;
 
 	public GameScreen(SketchEscape g) {
 		spriteBatch = new SpriteBatch();
@@ -52,7 +56,8 @@ public class GameScreen extends MyScreen {
 
 	public void create() {
 		gameState = GameState.running;
-		runSpeed = 8;
+		runSpeed = 7f;
+		increment = TimeUtils.nanoTime();
 
 		manager.load("data/floor.png", Texture.class);
 		manager.load("data/floor.png", Texture.class);
@@ -103,10 +108,10 @@ public class GameScreen extends MyScreen {
 			runningRender(delta);
 			break;
 		case paused:
-			
+
 			gameState = GameState.running;
 			game.setScreen(game.getPauseMenu());
-			
+
 			break;
 		case dead:
 			if (TimeUtils.nanoTime() - waitCounter < 1000000000) {
@@ -136,12 +141,11 @@ public class GameScreen extends MyScreen {
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
 		runner.draw(batch);
-		//Updates score
+		// Updates score
 		score = ((int) (camera.position.x - RESW / 2) / 100);
 		// Displays score
-		font.draw(batch,
-				String.valueOf(score),
-				camera.position.x + RESW / 2 - 100 - String.valueOf(score).length() * 7, RESH - 50);
+		font.draw(batch, String.valueOf(score), camera.position.x + RESW / 2
+				- 100 - String.valueOf(score).length() * 7, RESH - 50);
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
 			obstacles.get(i).draw(batch);
@@ -155,6 +159,14 @@ public class GameScreen extends MyScreen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// Moves player
+		if (runSpeed < 10) {
+			/*if (TimeUtils.nanoTime() - increment >= 15000000000f) {
+				runSpeed += 1;
+				increment = TimeUtils.nanoTime();
+			}*/
+			runSpeed *= 1.0001f;
+		}
+		
 		camera.position.add(runSpeed, 0, 0);
 		camera.update();
 
@@ -169,17 +181,17 @@ public class GameScreen extends MyScreen {
 
 		// Checks floor positioning
 		if (floorPosX[0] <= camera.position.x - RESW * 1.5) {
-			floorPosX[0] = camera.position.x + RESW / 2 - 8;
+			floorPosX[0] = floorPosX[1] + RESW;
 		}
 		if (floorPosX[1] <= camera.position.x - RESW * 1.5) {
-			floorPosX[1] = camera.position.x + RESW / 2 - 8;
+			floorPosX[1] = floorPosX[0] + RESW;
 		}
 
 		if (backgroundPosX[0] <= camera.position.x - RESW * 1.5) {
-			backgroundPosX[0] = camera.position.x + RESW / 2;
+			backgroundPosX[0] = backgroundPosX[1] + RESW;
 		}
 		if (backgroundPosX[1] <= camera.position.x - RESW * 1.5) {
-			backgroundPosX[1] = camera.position.x + RESW / 2;
+			backgroundPosX[1] = backgroundPosX[0] + RESW;
 		}
 
 		// Rendering...everything!!!
@@ -190,15 +202,15 @@ public class GameScreen extends MyScreen {
 		batch.draw(background, backgroundPosX[1], 0);
 		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
 		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
-		batch.draw(pauseButton, camera.position.x - RESW / 2 + 10, pauseButtonHeight);
+		batch.draw(pauseButton, camera.position.x - RESW / 2 + 10,
+				pauseButtonHeight);
 		runner.draw(batch);
-
-		//Updates score
-				score = ((int) (camera.position.x - RESW / 2) / 100);
+System.out.println(font.usesIntegerPositions());
+		// Updates score
+		score = ((int) (camera.position.x - RESW / 2) / 100);
 		// Draws Score
-		font.draw(batch,
-				String.valueOf(score),
-				camera.position.x + RESW / 2 - 100 - String.valueOf(score).length() * 7, RESH - 50);
+		font.draw(batch, String.valueOf(score), camera.position.x + RESW / 2
+				- 100 - String.valueOf(score).length() * 7, RESH - 50);
 
 		// Draws all objects in Array List
 		for (int i = 0; i < obstacles.size(); i++) {
@@ -301,7 +313,7 @@ public class GameScreen extends MyScreen {
 					runner.jump();
 					rightTouched = true;
 				}
-			} 
+			}
 		}
 		if (rightTouched == false) {
 			runner.jumpRelease();

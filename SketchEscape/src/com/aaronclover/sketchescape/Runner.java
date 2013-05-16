@@ -37,7 +37,7 @@ public class Runner{
 	private int posX = -300;
 	private float speedY;
 	private final float FLOAT_RATE = 0.7f;
-	private final float gravity = -0.7f;
+	private final float gravity = -0.6f;
 	private final float JUMP_HEIGHT = 5;
 	private float jumpSpeed;
 	private boolean jumpReleased;
