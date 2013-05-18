@@ -16,21 +16,15 @@ public class Obstacle {
 	// End Assets
 
 	protected Rectangle hitbox;
-	private float RESW;
-	private float RESH;
 	final static int SPRITE_WIDTH = 48;
-	final int SPRITE_HEIGHT = 48;
+	final static int SPRITE_HEIGHT = 48;
 	final static int SCALE = 5; // Reduces hitbox size, scaling from center
-	private OrthographicCamera camera;
 	protected float height;
 	protected boolean released;
 	// Debug
 	ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	Obstacle(OrthographicCamera pcamera, float x, float y) {
-		RESW = pcamera.viewportHeight;
-		RESH = pcamera.viewportHeight;
-		camera = pcamera;
 		height = y;
 		create(x, y);
 	}
@@ -50,13 +44,6 @@ public class Obstacle {
 		image.dispose();
 	}
 
-	public boolean isOffScreen() {
-		if (hitbox.x < camera.position.x - RESW) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	public float getTop() {
 		return height + SPRITE_HEIGHT;

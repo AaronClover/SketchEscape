@@ -6,6 +6,7 @@ package com.aaronclover.sketchescape;
 //Changed score display
 //Added score to game over screen
 //Changed paper image
+import java.awt.Font;
 import java.util.ArrayList;
 
 import com.aaronclover.sketchescape.Runner.State;
@@ -44,7 +45,6 @@ public class GameScreen extends MyScreen {
 	};
 
 	GameState gameState;
-	private boolean getScreenShot;
 	private long waitCounter;
 	private float increment;
 
@@ -77,12 +77,12 @@ public class GameScreen extends MyScreen {
 		runner = new Runner(camera, FLOOR_HEIGHT);
 
 		obstacles = new ArrayList<Obstacle>();
-		lastSpawnPos = camera.position.x + RESW;
+		lastSpawnPos = (int) camera.position.x + RESW;
 
 		score = 0;
 		timer = 0;
-
 		font = new BitmapFont();
+
 		font.setColor(Color.BLACK);
 		font.setScale(2);
 
@@ -98,6 +98,9 @@ public class GameScreen extends MyScreen {
 		pauseFrame = new FrameBuffer(Pixmap.Format.RGB888, RESW, RESH, false);
 		pauseFrameRegion = new TextureRegion(pauseFrame.getColorBufferTexture());
 		pauseFrameRegion.flip(false, true);
+
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	}
 
 	@Override
@@ -132,7 +135,6 @@ public class GameScreen extends MyScreen {
 
 		camera.update();
 
-		runner.update();
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
@@ -155,23 +157,18 @@ public class GameScreen extends MyScreen {
 	}
 
 	public void runningRender(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
+		
 		// Moves player
 		if (runSpeed < 10) {
-			/*if (TimeUtils.nanoTime() - increment >= 15000000000f) {
+			if (TimeUtils.nanoTime() - increment >= 15000000000f) {
 				runSpeed += 1;
 				increment = TimeUtils.nanoTime();
-			}*/
-			runSpeed *= 1.0001f;
+			}
 		}
-		
-		camera.position.add(runSpeed, 0, 0);
-		camera.update();
 
-		// Updates
-		runner.update();
+		camera.position.add(runSpeed, 0, 0);
+
 
 		if (Gdx.app.getType() == ApplicationType.Android) {
 			touchInput();
@@ -194,8 +191,10 @@ public class GameScreen extends MyScreen {
 			backgroundPosX[1] = backgroundPosX[0] + RESW;
 		}
 
-		// Rendering...everything!!!
+		// Updates score
+		score = ((int) (camera.position.x - RESW / 2) / 100);
 
+		// Rendering...everything!!!
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
@@ -205,9 +204,7 @@ public class GameScreen extends MyScreen {
 		batch.draw(pauseButton, camera.position.x - RESW / 2 + 10,
 				pauseButtonHeight);
 		runner.draw(batch);
-System.out.println(font.usesIntegerPositions());
-		// Updates score
-		score = ((int) (camera.position.x - RESW / 2) / 100);
+
 		// Draws Score
 		font.draw(batch, String.valueOf(score), camera.position.x + RESW / 2
 				- 100 - String.valueOf(score).length() * 7, RESH - 50);
@@ -218,6 +215,7 @@ System.out.println(font.usesIntegerPositions());
 		}
 
 		batch.end();
+		camera.update();
 		// End of drawing
 
 		// generate random selection for obstacle to be on floor or mid height.
@@ -237,17 +235,42 @@ System.out.println(font.usesIntegerPositions());
 		for (int i = 0; i < obstacles.size(); i++) {
 			// Debug
 			// obstacles.get(i).drawHitbox();
-			if (obstacles.get(i).isOffScreen()) {
+			if (obstacles.get(i).hitbox.x < camera.position.x - RESW) {
 				obstacles.remove(i);
 			}
-			if (obstacles.get(i).hitbox.overlaps(runner.hitbox)) {
-				endGame();
+			
+			
+		//Checks if runner collides with an obstacle on the x axis
+			if (runner.hitbox.x + runner.hitbox.width > obstacles.get(i).hitbox.x
+					&& runner.hitbox.x + runner.hitbox.width < obstacles.get(i).hitbox.x + obstacles.get(i).hitbox.width) {
+				//Checks if runner is in obstacle on y axis
+				if ((runner.hitbox.y < obstacles.get(i).hitbox.y - 5
+						+ Obstacle.SPRITE_HEIGHT) && (runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y)) {
+					endGame();
+				}
+				// Checks if runner is landing above box
+				else if (runner.hitbox.y <= obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT 
+						&& runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT) {
+					runner.land(obstacles.get(i).hitbox.y
+							+ Obstacle.SPRITE_HEIGHT);
+				}
+				else {
+					//runner.fall();
+				}
 			}
 
 		}
 
-		// Debug
-		// runner.drawHitbox();
+		
+
+		// Collision detection
+		if (runner.hitbox.y <= runner.floorHeight) {
+			runner.land(runner.floorHeight);
+		}
+		runner.drawHitbox();
+		
+		runner.update();
+
 	}
 
 	private void keyboardInput() {
@@ -346,6 +369,5 @@ System.out.println(font.usesIntegerPositions());
 		super.pause();
 		System.out.println("You Paused");
 		gameState = GameState.paused;
-		getScreenShot = true;
 	}
 }

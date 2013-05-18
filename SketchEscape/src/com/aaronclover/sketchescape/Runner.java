@@ -33,15 +33,14 @@ public class Runner{
 	final int WIDTH = SPRITE_WIDTH * SCALE;
 	final int HEIGHT = SPRITE_HEIGHT * SCALE;
 	private OrthographicCamera camera;
-	private float floorHeight;
+	float floorHeight;
 	private int posX = -300;
-	private float speedY;
-	private final float FLOAT_RATE = 0.7f;
-	private final float gravity = -0.6f;
-	private final float JUMP_HEIGHT = 5;
-	private float jumpSpeed;
+	protected float speedY;
+	private final float FLOAT_RATE = 0.06f;
+	private final float GRAVITY = -0.01f;
+	private final float MAX_VELOCITY = 4.9f;
+	private final float JUMP_HEIGHT = 1.5f;
 	private boolean jumpReleased;
-	private boolean duckReleased;
 	long beginningOfRoll;
 
 	// Debug
@@ -110,12 +109,20 @@ public class Runner{
 
 		// Debug
 		shapeRenderer = new ShapeRenderer();
+		currentSprite = runningSprite[0];
 	}
 
 	public void draw(SpriteBatch batch) {
 
 		batch.draw(currentSprite, hitbox.x, hitbox.y);
 
+	}
+	
+	public void drawHitbox() {
+		shapeRenderer.setColor(Color.BLACK);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.rect(100, hitbox.y, hitbox.width, hitbox.height);
+		shapeRenderer.end();
 	}
 
 
@@ -130,36 +137,19 @@ public class Runner{
 	}
 
 	public void update() {
-
+		
+		
+		
 		hitbox.y += speedY;
-		speedY += gravity;
+		if (state == State.jumping) {
+			if (speedY <= MAX_VELOCITY)
+				speedY += GRAVITY;
+			else
+				speedY = MAX_VELOCITY;
+		}
 		hitbox.x = camera.position.x + posX;
 
-		if (speedY > 0) {
-			jumpSpeed *= FLOAT_RATE;
-		} else {
-			// Checks floor
-			if (hitbox.y < floorHeight) {
-				if (state != State.ducking && state != State.dead) {
-					if (state == State.jumping) {
-						hitbox.setWidth(SPRITE_WIDTH);
-						if (MuteHandler.isMuted() == false) {
-							land.play();
-						}
-					}
-					state = state.running;
-
-				}
-				if (jumpReleased == true) {
-					jumpSpeed = JUMP_HEIGHT;
-				}
-				hitbox.y = floorHeight;
-				speedY = 0;
-
-			}
-		}
-		speedY += gravity;
-		hitbox.y += speedY;
+	
 		hitbox.x = camera.position.x + posX;
 
 		if (state == State.ducking) {
@@ -219,6 +209,23 @@ public class Runner{
 			lastFrameTime = TimeUtils.nanoTime();
 		}
 	}
+	
+	public void land(float f) {
+		if (state == State.jumping) {
+			speedY = 0;
+			hitbox.setWidth(SPRITE_WIDTH);
+			if (MuteHandler.isMuted() == false) {
+				land.play();
+			}
+			state = State.running;
+		}
+		hitbox.y = f;
+	}
+	
+	public void fall() {
+		state = State.jumping;
+		hitbox.setWidth(JUMP_WIDTH);
+	}
 
 	public void jump() {
 		if (state != State.jumping && jumpReleased == true) {
@@ -226,12 +233,17 @@ public class Runner{
 			hitbox.setHeight(SPRITE_HEIGHT);
 			hitbox.setWidth(JUMP_WIDTH);
 			jumpReleased = false;
+			speedY += JUMP_HEIGHT;
+			hitbox.y ++;
 			if (MuteHandler.isMuted() == false) {
 				jump.play();
 			}
 		}
 
-		speedY += jumpSpeed;
+		
+		if (state == State.jumping && speedY < 0) {
+			speedY += FLOAT_RATE;
+			}
 
 	}
 
@@ -246,12 +258,10 @@ public class Runner{
 			state = State.ducking;
 			hitbox.setHeight(DUCK_HEIGHT);
 			hitbox.setWidth(SPRITE_WIDTH);
-			duckReleased = false;
 		}
 
 	}
 
 	public void duckRelease() {
-		duckReleased = true;
 	}
 }
