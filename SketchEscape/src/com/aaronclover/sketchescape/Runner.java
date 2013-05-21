@@ -36,10 +36,10 @@ public class Runner{
 	float floorHeight;
 	private int posX = -300;
 	protected float speedY;
-	private final float FLOAT_RATE = 0.06f;
-	private final float GRAVITY = -0.01f;
+	private final float FLOAT_RATE = 0.2f;
+	private final float GRAVITY = -0.4f;
 	private final float MAX_VELOCITY = 4.9f;
-	private final float JUMP_HEIGHT = 1.5f;
+	private final float JUMP_HEIGHT = 30f;
 	private boolean jumpReleased;
 	long beginningOfRoll;
 

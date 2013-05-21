@@ -232,6 +232,8 @@ public class GameScreen extends MyScreen {
 			lastSpawnPos = obstacles.get(obstacles.size() - 1).hitbox.x;
 		}
 
+		boolean fall = true;
+		
 		for (int i = 0; i < obstacles.size(); i++) {
 			// Debug
 			// obstacles.get(i).drawHitbox();
@@ -246,16 +248,14 @@ public class GameScreen extends MyScreen {
 				//Checks if runner is in obstacle on y axis
 				if ((runner.hitbox.y < obstacles.get(i).hitbox.y - 5
 						+ Obstacle.SPRITE_HEIGHT) && (runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y)) {
-					endGame();
+					//endGame();
 				}
 				// Checks if runner is landing above box
 				else if (runner.hitbox.y <= obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT 
 						&& runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT) {
 					runner.land(obstacles.get(i).hitbox.y
 							+ Obstacle.SPRITE_HEIGHT);
-				}
-				else {
-					//runner.fall();
+					fall = false;
 				}
 			}
 
@@ -266,6 +266,12 @@ public class GameScreen extends MyScreen {
 		// Collision detection
 		if (runner.hitbox.y <= runner.floorHeight) {
 			runner.land(runner.floorHeight);
+			fall = false;
+		}
+		
+		//Handles falling 
+		if (fall == true) {
+			runner.fall();
 		}
 		runner.drawHitbox();
 		
