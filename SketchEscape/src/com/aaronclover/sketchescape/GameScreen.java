@@ -248,33 +248,33 @@ public class GameScreen extends MyScreen {
 				//Checks if runner is in obstacle on y axis
 				if ((runner.hitbox.y < obstacles.get(i).hitbox.y - 5
 						+ Obstacle.SPRITE_HEIGHT) && (runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y)) {
-					//endGame();
+					endGame();
 				}
-				// Checks if runner is landing above box
-				else if (runner.hitbox.y <= obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT 
-						&& runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT) {
-					runner.land(obstacles.get(i).hitbox.y
-							+ Obstacle.SPRITE_HEIGHT);
-					fall = false;
-				}
+//				// Checks if runner is landing above box
+//				else if (runner.hitbox.y <= obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT 
+//						&& runner.hitbox.y + runner.hitbox.height > obstacles.get(i).hitbox.y + Obstacle.SPRITE_HEIGHT) {
+//					runner.land(obstacles.get(i).hitbox.y
+//							+ Obstacle.SPRITE_HEIGHT);
+//					fall = false;
+//				}
 			}
 
 		}
-
-		
-
-		// Collision detection
+//
+//		
+//
+		//Floor Collision detection
 		if (runner.hitbox.y <= runner.floorHeight) {
 			runner.land(runner.floorHeight);
 			fall = false;
 		}
 		
-		//Handles falling 
-		if (fall == true) {
-			runner.fall();
-		}
-		runner.drawHitbox();
-		
+//		//Handles falling 
+//		if (fall == true) {
+//			runner.fall();
+//		}
+//		//runner.drawHitbox();
+//		
 		runner.update();
 
 	}
@@ -373,7 +373,6 @@ public class GameScreen extends MyScreen {
 	@Override
 	public void pause() {
 		super.pause();
-		System.out.println("You Paused");
 		gameState = GameState.paused;
 	}
 }

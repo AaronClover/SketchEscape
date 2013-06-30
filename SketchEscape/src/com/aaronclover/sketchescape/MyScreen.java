@@ -58,12 +58,12 @@ public class MyScreen implements Screen, InputProcessor {
 	static protected int score;
 
 	// Resolution Width
-	public final int RESW = 800;
+	public final static int RESW = 800;
 	// Resolution Height
-	public final int RESH = 480;
+	public final static int RESH = 480;
 	
-	private final int TOUCH_SCALEX = RESW / Gdx.graphics.getWidth();
-	private final int TOUCH_SCALEY = RESH / Gdx.graphics.getHeight();
+	public final static float SCREENSCALEX = RESW / Gdx.graphics.getWidth();
+	public final static float SCREENSCALEY = RESH / Gdx.graphics.getHeight();
 
 	// protected boolean played;
 

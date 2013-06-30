@@ -42,6 +42,8 @@ public class Runner{
 	private final float JUMP_HEIGHT = 30f;
 	private boolean jumpReleased;
 	long beginningOfRoll;
+	private final float SCREENSCALEX = MyScreen.SCREENSCALEX;
+	private final float SCREENSCALEY = MyScreen.SCREENSCALEY;
 
 	// Debug
 	ShapeRenderer shapeRenderer;
@@ -114,6 +116,58 @@ public class Runner{
 
 	public void draw(SpriteBatch batch) {
 
+		// Changes sprite set to the runner's state
+				switch (state) {
+				case running:
+					if (animationIndex > runningSprite.length - 1) {
+						animationIndex = 0;
+					}
+					currentSprite = runningSprite[animationIndex];
+					break;
+
+				case jumping:
+					if (animationIndex > jumpingSprite.length - 1) {
+						animationIndex = 0;
+					}
+					currentSprite = jumpingSprite[animationIndex];
+					break;
+
+				case ducking:
+					if (animationIndex > duckingSprite.length - 1) {
+						animationIndex = 0;
+					}
+					currentSprite = duckingSprite[animationIndex];
+					break;
+				case dead:
+					//if (animationIndex > deadSprite.length - 1) {
+					//	animationIndex = 0;
+					//}
+					currentSprite = deadSprite[animationIndex];
+					break;
+				default:
+					System.out.println("Animation switch broken");
+					break;
+				}
+				
+				System.out.println(state);
+
+				// Handles changing sprites for animation
+				if (TimeUtils.nanoTime() - lastFrameTime >= 80000000) {
+					if (state == State.jumping) {
+						if (animationIndex < jumpingSprite.length - 1) {
+							animationIndex++;
+						}
+					} else if (state == State.dead) {
+						if (animationIndex < deadSprite.length - 1) {
+							animationIndex++;
+							System.out.println(deadSprite.length - 1);
+						}
+					} else {
+						animationIndex++;
+					}
+
+					lastFrameTime = TimeUtils.nanoTime();
+				}
 		batch.draw(currentSprite, hitbox.x, hitbox.y);
 
 	}
@@ -121,7 +175,7 @@ public class Runner{
 	public void drawHitbox() {
 		shapeRenderer.setColor(Color.BLACK);
 		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.rect(100, hitbox.y, hitbox.width, hitbox.height);
+		shapeRenderer.rect(hitbox.x*SCREENSCALEX, hitbox.y*SCREENSCALEY, hitbox.width, hitbox.height);
 		shapeRenderer.end();
 	}
 
@@ -160,54 +214,7 @@ public class Runner{
 			}
 		}
 
-		// Changes sprite set to the runner's state
-		switch (state) {
-		case running:
-			if (animationIndex > runningSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = runningSprite[animationIndex];
-			break;
-
-		case jumping:
-			if (animationIndex > jumpingSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = jumpingSprite[animationIndex];
-			break;
-
-		case ducking:
-			if (animationIndex > duckingSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = duckingSprite[animationIndex];
-			break;
-		case dead:
-			if (animationIndex > deadSprite.length - 1) {
-				animationIndex = 0;
-			}
-			currentSprite = deadSprite[animationIndex];
-			break;
-		default:
-			break;
-		}
-
-		// Handles changing sprites for animation
-		if (TimeUtils.nanoTime() - lastFrameTime >= 80000000) {
-			if (state == State.jumping) {
-				if (animationIndex < jumpingSprite.length - 1) {
-					animationIndex++;
-				}
-			} else if (state == State.dead) {
-				if (animationIndex < deadSprite.length - 1) {
-					animationIndex++;
-				}
-			} else {
-				animationIndex++;
-			}
-
-			lastFrameTime = TimeUtils.nanoTime();
-		}
+		
 	}
 	
 	public void land(float f) {
@@ -230,6 +237,7 @@ public class Runner{
 	public void jump() {
 		if (state != State.jumping && jumpReleased == true) {
 			state = State.jumping;
+			animationIndex = 0;
 			hitbox.setHeight(SPRITE_HEIGHT);
 			hitbox.setWidth(JUMP_WIDTH);
 			jumpReleased = false;

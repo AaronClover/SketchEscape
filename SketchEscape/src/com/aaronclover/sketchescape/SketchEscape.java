@@ -1,5 +1,6 @@
 package com.aaronclover.sketchescape;
 
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
@@ -48,4 +49,10 @@ public class SketchEscape extends Game {
 		screenState = ScreenState.howto;
 		return howtoScreen;
 	}
+	
+	public void showAd() {
+		setScreen(game);
+		screenState = ScreenState.game;
+	}
+	
 }
