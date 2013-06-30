@@ -47,6 +47,7 @@ public class GameScreen extends MyScreen {
 	GameState gameState;
 	private long waitCounter;
 	private float increment;
+	private float blockDistance = 400;
 
 	public GameScreen(SketchEscape g) {
 		spriteBatch = new SpriteBatch();
@@ -56,7 +57,7 @@ public class GameScreen extends MyScreen {
 
 	public void create() {
 		gameState = GameState.running;
-		runSpeed = 7f;
+		runSpeed = 6;
 		increment = TimeUtils.nanoTime();
 
 		manager.load("data/floor.png", Texture.class);
@@ -227,7 +228,7 @@ public class GameScreen extends MyScreen {
 		}
 
 		if (obstacles.size() < 10) {
-			obstacles.add(new Obstacle(camera, lastSpawnPos + 256,
+			obstacles.add(new Obstacle(camera, lastSpawnPos + blockDistance,
 					spawnPositionY));
 			lastSpawnPos = obstacles.get(obstacles.size() - 1).hitbox.x;
 		}

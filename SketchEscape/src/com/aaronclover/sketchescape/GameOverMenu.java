@@ -26,8 +26,9 @@ public class GameOverMenu extends MyScreen {
 	private Rectangle playBox;
 	private int endingScore;
 	private int lastHighScore;
+	IActivityRequestHandler handler;
 
-	public GameOverMenu(SketchEscape g) {
+	public GameOverMenu(SketchEscape g, IActivityRequestHandler handler) {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, RESW, RESH);
 		spriteBatch = new SpriteBatch();
@@ -37,6 +38,7 @@ public class GameOverMenu extends MyScreen {
 		playBox = new Rectangle(camera.position.x - PLAY_BUTTON_WIDTH / 2,
 				camera.position.y - PLAY_BUTTON_HEIGHT / 2, PLAY_BUTTON_WIDTH,
 				PLAY_BUTTON_HEIGHT);
+		this.handler = handler;
 
 	}
 
@@ -132,9 +134,17 @@ public class GameOverMenu extends MyScreen {
 
 	@Override
 	public void show() {
+		handler.controlAds(1);
 		super.show();
 		game.game.create();
 		System.gc();
+		
+	}
+	
+	@Override
+	public void hide() {
+		handler.controlAds(2);
+		super.hide();
 	}
 	
 }

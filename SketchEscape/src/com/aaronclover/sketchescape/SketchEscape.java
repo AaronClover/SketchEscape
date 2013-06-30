@@ -3,6 +3,7 @@ package com.aaronclover.sketchescape;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.google.ads.AdView;
 
 public class SketchEscape extends Game {
 	protected GameScreen game;
@@ -13,14 +14,19 @@ public class SketchEscape extends Game {
 	
 	public enum ScreenState { mainmenu, howto, game, gameover, pause};
 	public static ScreenState screenState = ScreenState.mainmenu;
+	private IActivityRequestHandler myRequestHandler;
 
+	public SketchEscape(IActivityRequestHandler handler) {
+	        myRequestHandler = handler;
+	    }
+	
 	@Override
 	public void create() {
 		mainMenu = new MainMenu(this);
 		howtoScreen = new HowToScreen(this);
 		game = new GameScreen(this);
 		pauseMenu = new PauseMenu(this);
-		gameOverMenu = new GameOverMenu(this);
+		gameOverMenu = new GameOverMenu(this, myRequestHandler);
 		setScreen(mainMenu);
 	}
 

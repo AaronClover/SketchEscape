@@ -12,6 +12,6 @@ public class Main {
 		cfg.width = 800;
 		cfg.height = 480;
 		
-		new LwjglApplication(new SketchEscape(), cfg);
+		new LwjglApplication(new SketchEscape(null), cfg);
 	}
 }
