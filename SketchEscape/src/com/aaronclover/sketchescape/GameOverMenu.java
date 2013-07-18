@@ -2,6 +2,7 @@ package com.aaronclover.sketchescape;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -100,41 +101,80 @@ public class GameOverMenu extends MyScreen {
 	
 	private int getHighScore() {
 		int lastHighScore;
-		try {
-			FileInputStream fis = new FileInputStream (Gdx.files.getLocalStoragePath() + "/cache.c");
-			DataInputStream dis = new DataInputStream(fis);
-			lastHighScore = dis.readInt();
-			dis.close();
-			return lastHighScore;
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			File scoreSave = new File("cache.c");
+			if(!scoreSave.exists()) {
+			    try {
+					scoreSave.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} 
+			try {
+				FileInputStream fis = new FileInputStream ("cache.c");
+				DataInputStream dis = new DataInputStream(fis);
+				lastHighScore = dis.readInt();
+				dis.close();
+				return lastHighScore;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return 0;
+			}
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-			return 0;
+		else {
+			try {
+				FileInputStream fis = new FileInputStream (Gdx.files.getLocalStoragePath() + "/cache.c");
+				DataInputStream dis = new DataInputStream(fis);
+				lastHighScore = dis.readInt();
+				dis.close();
+				return lastHighScore;
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+				return 0;
+			}
 		}
+		
 	}
 	
 	private void setHighScore(int newHighScore) {
-		try {
-			FileOutputStream fos = new FileOutputStream(Gdx.files.getLocalStoragePath() + "/cache.c");
-			DataOutputStream dos = new DataOutputStream(fos);
-			dos.writeInt(newHighScore);
-			dos.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			try {
+				FileOutputStream fos = new FileOutputStream("cache.c");
+				DataOutputStream dos = new DataOutputStream(fos);
+				dos.writeInt(newHighScore);
+				dos.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		
-		
-		 
+			else {
+			try {
+				FileOutputStream fos = new FileOutputStream(Gdx.files.getLocalStoragePath() + "/cache.c");
+				DataOutputStream dos = new DataOutputStream(fos);
+				dos.writeInt(newHighScore);
+				dos.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} 
 	}
 
 
 	@Override
 	public void show() {
-		handler.controlAds(1);
+		if (Gdx.app.getType() == ApplicationType.Android)
+			handler.controlAds(1);
 		super.show();
 		game.game.create();
 		System.gc();
@@ -143,7 +183,8 @@ public class GameOverMenu extends MyScreen {
 	
 	@Override
 	public void hide() {
-		handler.controlAds(2);
+		if (Gdx.app.getType() == ApplicationType.Android)
+			handler.controlAds(2);
 		super.hide();
 	}
 	
