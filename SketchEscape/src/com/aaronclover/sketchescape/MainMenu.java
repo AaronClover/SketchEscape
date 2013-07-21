@@ -3,16 +3,19 @@ package com.aaronclover.sketchescape;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class MainMenu extends MyScreen {
 	private SpriteBatch spriteBatch;
 	private Texture splash;
 	private SketchEscape game;
-	private Texture playButton, howtoButton;
-	final int PLAY_BUTTON_WIDTH = 200;
+	private Texture howtoButton;
+	private Texture playButton;
+	final int PLAY_BUTTON_WIDTH = 300;
 	final int PLAY_BUTTON_HEIGHT = 100;
 	private Rectangle playBox, howtoBox;
 
@@ -39,8 +42,9 @@ public class MainMenu extends MyScreen {
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
 		spriteBatch.draw(splash, 0, 0);
-		spriteBatch.draw(playButton, playBox.x, playBox.y);
-		spriteBatch.draw(howtoButton, howtoBox.x, howtoBox.y);
+		//spriteBatch.draw(playButton, playBox.x, playBox.y);
+		spriteBatch.draw(playButton, playBox.x, playBox.y, playBox.width, playBox.height);
+		spriteBatch.draw(howtoButton, howtoBox.x, howtoBox.y, howtoBox.width, howtoBox.height);
 
 		if (MuteHandler.isMuted())
 			spriteBatch.draw(muted, muteBox.x, muteBox.y);
