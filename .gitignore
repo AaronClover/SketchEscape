@@ -16,6 +16,9 @@ local.properties
 .settings/
 .loadpath
 
+# Cached images
+*.svg
+
 # External tool builders
 .externalToolBuilders/
 
