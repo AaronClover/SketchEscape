@@ -5,7 +5,7 @@
 *.pydevproject
 .project
 .metadata
-my-gdx-game-android/bin/
+SketchEscape-android/bin/
 tmp/
 *.tmp
 *.bak
