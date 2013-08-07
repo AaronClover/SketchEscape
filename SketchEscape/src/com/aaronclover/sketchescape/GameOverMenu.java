@@ -62,9 +62,9 @@ public class GameOverMenu extends MyScreen {
 				50);
 		
 		if (MuteHandler.isMuted())
-			spriteBatch.draw(muted, muteBox.x, muteBox.y);
+			spriteBatch.draw(muted, muteBox.x, muteBox.y, muteBox.width, muteBox.height);
 		else
-			spriteBatch.draw(unmuted, muteBox.x, muteBox.y);
+			spriteBatch.draw(unmuted, muteBox.x, muteBox.y, muteBox.width, muteBox.height);
 		
 		spriteBatch.end();
 

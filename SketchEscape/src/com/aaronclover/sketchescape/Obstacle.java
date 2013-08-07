@@ -37,7 +37,7 @@ public class Obstacle {
 
 	public void draw(SpriteBatch batch) {
 
-		batch.draw(image, hitbox.x - SCALE / 2, hitbox.y - SCALE / 2);
+		batch.draw(image, hitbox.x - SCALE / 2, hitbox.y - SCALE / 2, hitbox.width, hitbox.height);
 	}
 
 	public void dispose() {

@@ -39,12 +39,12 @@ public class PauseMenu extends MyScreen {
 		spriteBatch.setProjectionMatrix(camera.combined);
 		spriteBatch.begin();
 		spriteBatch.draw(paper, 0, 0);
-		spriteBatch.draw(resumeButton, resumeBox.x, resumeBox.y);
+		spriteBatch.draw(resumeButton, resumeBox.x, resumeBox.y, resumeBox.width, resumeBox.height);
 		
 		if (MuteHandler.isMuted())
-			spriteBatch.draw(muted, muteBox.x, muteBox.y);
+			spriteBatch.draw(muted, muteBox.x, muteBox.y, 50, 50);
 		else
-			spriteBatch.draw(unmuted, muteBox.x, muteBox.y);
+			spriteBatch.draw(unmuted, muteBox.x, muteBox.y, 50, 50);
 		
 		spriteBatch.end();
 

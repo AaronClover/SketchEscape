@@ -6,7 +6,6 @@ package com.aaronclover.sketchescape;
 //Changed score display
 //Added score to game over screen
 //Changed paper image
-import java.awt.Font;
 import java.util.ArrayList;
 
 import com.aaronclover.sketchescape.Runner.State;
@@ -23,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -38,7 +38,10 @@ public class GameScreen extends MyScreen {
 	private Texture floor;
 	private Texture background;
 	protected float floorPosX[];
+	private Vector2 floorBox = new Vector2(800, 20);
 	protected float backgroundPosX[];
+	
+	
 
 	protected enum GameState {
 		running, paused, dead
@@ -141,8 +144,8 @@ public class GameScreen extends MyScreen {
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
 		batch.draw(background, backgroundPosX[1], 0);
-		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
-		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
+		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15, 800, 20);
+		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15, 800, 20);
 		runner.draw(batch);
 		// Updates score
 		score = ((int) (camera.position.x - RESW / 2) / 100);
@@ -200,10 +203,10 @@ public class GameScreen extends MyScreen {
 		batch.begin();
 		batch.draw(background, backgroundPosX[0], 0);
 		batch.draw(background, backgroundPosX[1], 0);
-		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15);
-		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15);
+		batch.draw(floor, floorPosX[0], FLOOR_HEIGHT - 15, 800, 20);
+		batch.draw(floor, floorPosX[1], FLOOR_HEIGHT - 15, 800, 20);
 		batch.draw(pauseButton, camera.position.x - RESW / 2 + 10,
-				pauseButtonHeight);
+				pauseButtonHeight, 50, 50);
 		runner.draw(batch);
 
 		// Draws Score

@@ -1,13 +1,11 @@
 package com.aaronclover.sketchescape;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.math.Vector2;
 
 public class MainMenu extends MyScreen {
 	private SpriteBatch spriteBatch;
@@ -47,9 +45,9 @@ public class MainMenu extends MyScreen {
 		spriteBatch.draw(howtoButton, howtoBox.x, howtoBox.y, howtoBox.width, howtoBox.height);
 
 		if (MuteHandler.isMuted())
-			spriteBatch.draw(muted, muteBox.x, muteBox.y);
+			spriteBatch.draw(muted, muteBox.x, muteBox.y, muteBox.width, muteBox.height);
 		else
-			spriteBatch.draw(unmuted, muteBox.x, muteBox.y);
+			spriteBatch.draw(unmuted, muteBox.x, muteBox.y, muteBox.width, muteBox.height);
 
 		spriteBatch.end();
 
